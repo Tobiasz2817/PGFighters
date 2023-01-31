@@ -35,8 +35,6 @@ public class PanelActivity : MonoBehaviour
         if (!newPanel) return;
         if (currentSelectedPanel == newPanel) return;
         
-        Debug.Log("Invoke Button handler");
-        
         if(currentSelectedPanel) currentSelectedPanel.OnPanelDeselection?.Invoke();
         newPanel.OnPanelSelection?.Invoke();
         

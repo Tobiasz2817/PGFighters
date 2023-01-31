@@ -62,7 +62,7 @@ public class CustomizeCharacterEquipment : MonoBehaviour
             if (currentEquipment[i].customizeSelection.secoundPart != customizeSelection.secoundPart) continue;
             if (currentEquipment[i].prefab != null)
                 Destroy(currentEquipment[i].prefab);
-
+            
             GameObject newObject = Instantiate(prefab,contents[currentEquipment[i].customizeSelection.contentName]);
             currentEquipment[i] = new CustomizeSelectionTmp(customizeSelection,newObject);
         }
