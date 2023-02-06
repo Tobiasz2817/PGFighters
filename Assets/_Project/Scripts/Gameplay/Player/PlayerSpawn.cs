@@ -11,7 +11,7 @@ public class PlayerSpawn : NetworkBehaviour
 {
     [SerializeField] private GameObject robotPrefab;
     [SerializeField] private Transform[] points;
-    
+
     public override void OnNetworkDespawn() {
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= ClientsLoadedEvent;
@@ -31,17 +31,17 @@ public class PlayerSpawn : NetworkBehaviour
     private void ClientsLoadedEvent(string scenename, LoadSceneMode loadscenemode, List<ulong> clientscompleted, List<ulong> clientstimedout) {
         Debug.Log("ClientsLoadedEvent");
         if (!IsServer) return;
-        SpawnPlayers();
+        SpawnPlayers(clientscompleted);
         Debug.Log("Car is spawned");
     }
 
     private void ClientsLoadedScene(ulong clientid, string scenename, LoadSceneMode loadscenemode) {
         Debug.Log("ClientsLoadedScene");
     }
-    private void SpawnPlayers() {
-        foreach (var client in NetworkManager.Singleton.ConnectedClients) {
-            Debug.Log(NetworkManager.Singleton.ConnectedClients);
-            SpawnRobot(client.Key);
+    private void SpawnPlayers(List<ulong> clientscompleted) {
+        foreach (var client in clientscompleted) {
+            Debug.Log(client);
+            SpawnRobot(client);
         }
     }
 

@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.UI;
 
 
 public class PanelActivity : MonoBehaviour
@@ -10,15 +10,19 @@ public class PanelActivity : MonoBehaviour
     private Panel currentSelectedPanel;
     
     private MainPanel[] _mainPanels;
+    
+    [SerializeField]
     private MainPanel currentSelectedMainPanel;
     
+    [SerializeField]
     private ButtonPanelHandler[] _buttonsHandler;
-    
+
     private void Awake()
     {
         Instance = this;
         _panels = GetComponentsInChildren<Panel>();
         _mainPanels = GetComponentsInChildren<MainPanel>();
+        
     }
 
     private void OnEnable()
@@ -29,31 +33,27 @@ public class PanelActivity : MonoBehaviour
     {
         ButtonPanelHandler.OnButtonClick -= MoveTo;
     }
-    public void MoveTo(Panels typePanel)
-    {
+    public async void MoveTo(Panels typePanel) {
         var newPanel = FindPanels(typePanel);
         if (!newPanel) return;
         if (currentSelectedPanel == newPanel) return;
+        ChangeInteractionButtons(false);
         
-        if(currentSelectedPanel) currentSelectedPanel.OnPanelDeselection?.Invoke();
-        newPanel.OnPanelSelection?.Invoke();
-        
+        if(currentSelectedPanel) await currentSelectedPanel.DeselectionPanel();
         currentSelectedPanel = newPanel;
+        await currentSelectedPanel.SelectionPanel();
+
+        ChangeInteractionButtons(true);
     }
-    public void MoveTo(MainPanels mainTypePanel)
-    {
+    public async void MoveTo(MainPanels mainTypePanel) {
+        
         var newPanel = FindPanels(mainTypePanel);
         if (!newPanel) return;
         if (currentSelectedMainPanel == newPanel) return;
-        
-        Debug.Log("Invoke Button handler");
-        
-        if(currentSelectedMainPanel) currentSelectedMainPanel.OnPanelDeselection?.Invoke();
-        newPanel.OnPanelSelection?.Invoke();
-        
+
+        if(currentSelectedMainPanel) await currentSelectedMainPanel.DeselectionPanel();
         currentSelectedMainPanel = newPanel;
-        
-        
+        await currentSelectedMainPanel.SelectionPanel();
     }
     Panel FindPanels(Panels typePanel)
     {
@@ -70,5 +70,10 @@ public class PanelActivity : MonoBehaviour
                 return panel;
 
         return null;
+    }
+
+    private void ChangeInteractionButtons(bool isActive) {
+        foreach (var buttons in _buttonsHandler) 
+            buttons.button.interactable = isActive;
     }
 }

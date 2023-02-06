@@ -36,6 +36,19 @@ public class Spawner : NetworkBehaviour
         return spawnedObj;
     }
     
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnObjectServerRpc(ulong objectId, bool destroy = true) {
+        if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(objectId)) return;
+        var objToDespawn = NetworkManager.Singleton.SpawnManager.SpawnedObjects[objectId];
+        objToDespawn.Despawn(destroy);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void DespawnPlayerServerRpc(ulong clientId, bool destroy = true) {
+        var player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
+        if (!player) return;
+        player.Despawn(destroy);
+    }
+    
     #region Network
     
     [ServerRpc(RequireOwnership = false)]

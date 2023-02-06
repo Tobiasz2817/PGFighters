@@ -7,10 +7,12 @@ using UnityEngine;
 public class PlayerDeath : NetworkBehaviour {
     public override void OnNetworkSpawn() {
         this.enabled = IsOwner;
+        if (!IsOwner) return;
         PlayerHealth.OnHealthChange += CheckHealth;
     }
 
     public override void OnNetworkDespawn() {
+        if (!IsOwner) return;
         PlayerHealth.OnHealthChange -= CheckHealth;
     }
 
@@ -18,8 +20,7 @@ public class PlayerDeath : NetworkBehaviour {
         if (health <= 0) {
             Debug.Log("I die");
             GameManager.Instance.GameIsOver?.Invoke(OwnerClientId);
-            //Spawner.Instance.DeSpawnPlayerObjectServerRpc(OwnerClientId);
-            //Destroy(this);
+            
             DisablePlayerServerRpc(OwnerClientId);
         }
     }
@@ -30,7 +31,9 @@ public class PlayerDeath : NetworkBehaviour {
     }
     [ClientRpc]
     private void DisablePlayerClientRpc(ulong id) {
+        var player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id);
+        if (player == null) return;
+        player.gameObject.SetActive(false);
         Debug.Log(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id).gameObject.name);
-        NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id).gameObject.SetActive(false);
     }
 }

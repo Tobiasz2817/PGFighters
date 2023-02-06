@@ -48,11 +48,9 @@ public class CreateRoomPanel : Panel
     }
     protected override void OnSelectionPanel()
     {
-        base.OnSelectionPanel();
     }
     protected override void OnDeselectionPanel()
     {
-        base.OnDeselectionPanel();
     }
     
     private void UpdateText() {

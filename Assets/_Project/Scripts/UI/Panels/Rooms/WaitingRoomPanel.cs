@@ -58,10 +58,9 @@ public class WaitingRoomPanel : Panel
 
 
     protected override void OnSelectionPanel() {
-        base.OnSelectionPanel();
+        
     }
     protected override void OnDeselectionPanel() {
-        base.OnDeselectionPanel();
         LobbyManager.Instance.LeaveLobby();
     }
     private void OnLeftLobby(Lobby lobby) {

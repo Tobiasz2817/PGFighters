@@ -12,28 +12,27 @@ public class PlayerCollider : NetworkBehaviour {
         this.enabled = IsOwner;
         
         if (!IsOwner) return;
-        CollisionDetecter.OnCollisionDetected += OnTriggerEnter;
+       // CollisionDetecter.OnCollisionDetected += OnTriggerEnter;
     }
 
     public override void OnNetworkDespawn() {
         if (!IsOwner) return;
-        CollisionDetecter.OnCollisionDetected -= OnTriggerEnter;
+       // CollisionDetecter.OnCollisionDetected -= OnTriggerEnter;
     }
 
     public void OnTriggerEnter(Collider other) {
         Debug.Log("Owner Id: " + OwnerClientId);
         var bullet = other.GetComponent<Bullet>();
-        
-        if (bullet != null) {
-            if(!bullet.IsOwner && IsOwner) {
-                OnCollision?.Invoke(other);
 
-                if(IsServer) DeSpawnObjectServerRpc(bullet.NetworkObjectId);
-                //Spawner.Instance.DeSpawnObjectServerRpc(bullet.NetworkObjectId);
+        if (bullet != null) {
+            if(!bullet.IsOwner) {
+                OnCollision?.Invoke(other);
+                
                 Debug.Log("TAK");
             }
-            other.gameObject.SetActive(false);
             Debug.Log(" Bullet sender Id:" + bullet.senderId + " OwnerCliend Id:" + OwnerClientId + " Owner: " + IsOwner + " Bullet owner: " + bullet.IsOwner);
+            
+            other.gameObject.SetActive(false);
         }
         
         Debug.Log("OnTrigger");

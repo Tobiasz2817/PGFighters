@@ -19,14 +19,12 @@ public class CustomizePanel : Panel
         base.Start();
         button.onClick.AddListener(() => OnSaveChanges?.Invoke());
     }
-    protected override async void OnSelectionPanel() {
-        base.OnSelectionPanel();
+    protected override void OnSelectionPanel() {
         customizeCharacterEquipment.EnableDisplayCharacter();
         
         OnEnableCustomize?.Invoke(CustomizeCharacterEquipmentData.Instance.currentKeySelectedCustomization);
     }
     protected override void OnDeselectionPanel() {
-        base.OnDeselectionPanel();
         customizeCharacterEquipment.DisableDisplayCharacter();
     }
     

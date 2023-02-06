@@ -25,16 +25,40 @@ public abstract class Bullet : NetworkBehaviour
 
         canMove = true;
     }
-
-    public void SetParticleVelocity(Vector3 direction_) {
+    /*public void SetParticleVelocity(float x,float y,float z) {
         ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.main.maxParticles];
         int count = particleSystem.GetParticles(particles);
         for (int i = 0; i < count; i++) {
-            particles[i].velocity = direction_ * speed;
+            particles[i].velocity = new Vector3(x,y,z) * speed;
         }
         particleSystem.SetParticles(particles, count);
+    }*/
+    protected abstract void MoveTo();
+
+    protected void DisableSelf() {
+        this.gameObject.SetActive(false);
+    }
+    
+    #region Unity function
+    private void OnDisable() {
+        if (IsOwner) return;
+        Spawner.Instance.DespawnObjectServerRpc(NetworkObjectId,true);
     }
     private void Update() { if (!canMove) return; MoveTo(); }
+    private void OnTriggerEnter(Collider other) {
+        Debug.Log("WTFFF");
+        Debug.Log("Other: " + other.name + " Self: " + OwnerClientId + " ObjectId: " + NetworkObjectId + " Is Owner: " + IsOwner);
 
-    protected abstract void MoveTo();
+        DisableSelf();
+        if (IsOwner) return;
+
+        if (other.CompareTag("Player") ) {
+            var playerReference = other.GetComponent<PlayerReference>();
+            if (playerReference != null) {
+                playerReference.playerHealth.DealDamage(this);
+            }
+        }
+        
+    }
+    #endregion
 }

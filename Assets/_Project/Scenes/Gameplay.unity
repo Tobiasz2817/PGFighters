@@ -1363,6 +1363,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1792750969}
     m_Modifications:
+    - target: {fileID: 6934359893175716932, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: dot
+      value: 
+      objectReference: {fileID: 2414674545261053129}
+    - target: {fileID: 6934359893175716932, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: dotResize
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6934359893175716932, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: dotDuration
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6934359893175716932, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: timePreparing
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7255274510396028075, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7255274510396028075, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7255274510396028075, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280258989179392622, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8221879492071060904, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
       propertyPath: m_Name
       value: Game Over Interface
@@ -1455,6 +1487,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8221879492071060907, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
 --- !u!114 &2414674545261053128 stripped
@@ -1468,6 +1504,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc6a1d526ee1a384494af2ee5b665ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2414674545261053129 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6496847280024517232, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}
+  m_PrefabInstance: {fileID: 2414674545261053127}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6024512704633401708 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8221879492071060907, guid: 34db4e0f85b8d264bb5900b32c2a6803, type: 3}

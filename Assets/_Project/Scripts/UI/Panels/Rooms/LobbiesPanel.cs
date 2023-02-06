@@ -36,10 +36,8 @@ public class LobbiesPanel : Panel
         LobbyManager.Instance.OnLobbyListChanged += UpdateLobbyList;
     }
     protected override void OnSelectionPanel() {
-        base.OnSelectionPanel();
     } 
     protected override void OnDeselectionPanel() {
-        base.OnDeselectionPanel();
     }
     private void UpdateLobbyList(List<Lobby> lobbies) {
         ClearLobby();

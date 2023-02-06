@@ -37,7 +37,6 @@ public class RelayManager : MonoBehaviour
     {
         try {
             var allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData,allocation.HostConnectionData);
             NetworkManager.Singleton.StartClient();
         }

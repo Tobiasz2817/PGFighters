@@ -12,10 +12,10 @@ public class MainWindowPanel : Panel
     }
     protected override void OnSelectionPanel()
     {
-        base.OnSelectionPanel();
+        
     }
     protected override void OnDeselectionPanel()
     {
-        base.OnDeselectionPanel();
+        
     }
 }

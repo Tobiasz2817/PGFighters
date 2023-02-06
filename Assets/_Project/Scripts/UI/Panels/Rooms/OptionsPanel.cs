@@ -15,10 +15,9 @@ public class OptionsPanel : Panel
     }
     protected override void OnSelectionPanel()
     {
-        base.OnSelectionPanel();
+        
     }
     protected override void OnDeselectionPanel()
     {
-        base.OnDeselectionPanel();
     }
 }

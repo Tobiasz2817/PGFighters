@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour
     private Vector3 rayPoint;
     
     private PlayerInput playerInput;
-    private Rigidbody rigidbody;
+    //private Rigidbody rigidbody;
 
     private Vector3 currentMovement;
     private Vector3 targetMovement;
@@ -38,7 +38,7 @@ public class PlayerController : NetworkBehaviour
 
     private void Awake() {
         playerInput = GetComponent<PlayerInput>();
-        rigidbody = GetComponent<Rigidbody>();
+        //rigidbody = GetComponent<Rigidbody>();
     }
 
     private void Update() {
@@ -55,10 +55,10 @@ public class PlayerController : NetworkBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private void MoveCharacter() {
         if (inputMovement == Vector3.zero) return; 
-        //rigidbody.MovePosition((rigidbody.position + inputMovement.normalized) * speed * Time.deltaTime);
+        /*//rigidbody.MovePosition((rigidbody.position + inputMovement.normalized) * speed * Time.deltaTime);
         rigidbody.position = (rigidbody.position + inputMovement.normalized * (speed * Time.deltaTime));
         Debug.Log("I Move");
-        return;
+        return;*/
         inputMovement.y = transform.position.y;
         targetMovement = inputMovement.normalized;
 
