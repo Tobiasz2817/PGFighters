@@ -38,6 +38,10 @@ public class CustomizeCharacterEquipmentData : MonoBehaviour, IDataInstances
     {
         return index < customizeCharacterDict.Count && index > 0 ? customizeCharacterDict[index] : null;
     }
+    public void Clear()
+    {
+        customizeCharacterDict.Clear();
+    }
     #endregion
 
     #region Equipment Data Operations

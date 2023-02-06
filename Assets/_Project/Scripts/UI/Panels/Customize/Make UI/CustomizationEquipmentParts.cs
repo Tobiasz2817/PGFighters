@@ -16,8 +16,9 @@ public class CustomizationEquipmentParts : MonoBehaviour
         InstancesChilds();
     }
 
-    private void InstancesChilds()
-    {
+    private void InstancesChilds() {
+        CustomizeCharacterEquipmentData.Instance.Clear();
+        
         int x = 0;
         foreach (var mainPart in _customizeData.GetCustomizeList())
             foreach (var secoundPart in mainPart.secoundPartList)

@@ -11,6 +11,7 @@ using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -42,7 +43,7 @@ public class LobbyManager : MonoBehaviour
     private Lobby joinedLobby;
     private string playerName;
 
-
+    private bool someMethodAreInvoking = false;
     private void Awake() {
         Instance = this;
     }
@@ -51,6 +52,10 @@ public class LobbyManager : MonoBehaviour
         HandleLobbyHeartbeat();
         HandleRefreshLobbyList();
         HandleLobbyPolling();
+    }
+
+    public bool SomeMethodAreInvoking() {
+        return someMethodAreInvoking;
     }
     
     public async void Authenticate(string playerName) {
@@ -70,7 +75,14 @@ public class LobbyManager : MonoBehaviour
         
         OnAuthenticationSigned?.Invoke();
     }
-    
+    public async void AuthenticateData(string playerName) {
+        this.playerName = playerName;
+        
+        OnAuthenticationSigned?.Invoke();
+    }
+    public bool IsSinged() {
+        return UnityServices.State == ServicesInitializationState.Initialized ? AuthenticationService.Instance.IsSignedIn : false;
+    }
     private void HandleRefreshLobbyList() {
         if (UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn) {
             refreshLobbyListTimer -= Time.deltaTime;
@@ -122,7 +134,6 @@ public class LobbyManager : MonoBehaviour
  
                     joinedLobby = null;
                 }
-                
             }
         }
     }

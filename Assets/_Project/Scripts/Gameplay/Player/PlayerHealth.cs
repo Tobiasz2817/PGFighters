@@ -13,20 +13,16 @@ public class PlayerHealth : NetworkBehaviour
 
     public override void OnNetworkSpawn() {
        this.enabled = IsOwner;
-       
-       PlayerCollider.OnCollision += CheckCollision;
     }
 
     public override void OnNetworkDespawn() {
-        PlayerCollider.OnCollision -= CheckCollision;
+        
     }
 
-    private void CheckCollision(Collider obj) {
-        if (IsOwner) {
-            float damage = obj.GetComponent<Bullet>().Damage; 
-            TakeDamage(damage);
-            Debug.Log("I Taking damage: " + damage);
-        }
+    public void DealDamage(Bullet bullet) {
+        float damage = bullet.Damage; 
+        TakeDamage(damage);
+        Debug.Log("I Taking damage: " + damage + " my id: " + OwnerClientId);
     }
 
     private void ChangeHealth(float newHealth) {

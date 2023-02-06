@@ -1,8 +1,9 @@
 using System;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
-public class MainPanel : MonoBehaviour
+public abstract class MainPanel : MonoBehaviour
 {
     public Action OnPanelSelection;
     public Action OnPanelDeselection;
@@ -13,9 +14,7 @@ public class MainPanel : MonoBehaviour
     [Header("Canvas Group Settings")] 
     [SerializeField]
     protected float alphaDuration = 0.8f;
-
-    [HideInInspector]
-    public bool isCurrentActive = false;
+    
 
     protected virtual void Awake()
     {
@@ -26,41 +25,38 @@ public class MainPanel : MonoBehaviour
     {
        
     }
-
-    public void OnEnable()
-    {
-        OnPanelSelection += OnSelectionPanel;
-        OnPanelDeselection += OnDeselectionPanel;
-    }
-
-    public void OnDisable()
-    {
-        OnPanelSelection -= OnSelectionPanel;
-        OnPanelDeselection -= OnDeselectionPanel;
-    }
-    protected virtual void OnSelectionPanel()
+    public async Task SelectionPanel()
     {
         SetInteractable(true);
         SetBlockRaycasts(true);
-        SmoothSelectionPanel();
-
-        isCurrentActive = true;
+        
+        await SmoothSelectionPanel(alphaDuration);
+        
+        OnSelectionPanel();
     }
-    protected virtual void OnDeselectionPanel()
+    public async Task DeselectionPanel()
     {
+        await SmoothDeselectionPanel(alphaDuration);
+        
+        OnDeselectionPanel();
+        
         SetInteractable(false);
         SetBlockRaycasts(false);
-        SmoothDeselectionPanel();
-
-        isCurrentActive = false;
     }
-    private void SmoothSelectionPanel()
+
+    protected abstract void OnSelectionPanel();
+    protected abstract void OnDeselectionPanel();
+    
+    private async Task SmoothSelectionPanel(float alphaDuration)
     {
         _canvasGroup.DOFade(1, alphaDuration);
+        await Task.Delay((int)(alphaDuration * 1000));
     }
-    private async void SmoothDeselectionPanel()
+    private async Task SmoothDeselectionPanel(float alphaDuration)
     {
-        _canvasGroup.DOFade(0, alphaDuration / 2);
+        var deselectionAlphaDuration = alphaDuration / 2;
+        _canvasGroup.DOFade(0, deselectionAlphaDuration);
+        await Task.Delay((int)(deselectionAlphaDuration * 1000));
     }
     private void SetBlockRaycasts(bool isRaycasts)
     {
@@ -71,3 +67,4 @@ public class MainPanel : MonoBehaviour
         _canvasGroup.interactable = isInteractable;
     }
 }
+

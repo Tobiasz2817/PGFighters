@@ -22,11 +22,7 @@ public class CameraRay : MonoBehaviour
     private void OnEnable() {
         rayInput.currentActionMap["Mouse"].performed += ReadMousePosition;
     }
-
-    private void OnDisable() {
-        rayInput.currentActionMap["Mouse"].performed -= ReadMousePosition;
-    }
-
+    
     private void ReadMousePosition(InputAction.CallbackContext obj) {
         Ray ray = Camera.main.ScreenPointToRay(obj.ReadValue<Vector2>());
         

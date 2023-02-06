@@ -14,10 +14,10 @@ public class MainMenuPanel : MainPanel
     }
     protected override void OnSelectionPanel()
     {
-        base.OnSelectionPanel();
+        
     }
     protected override void OnDeselectionPanel()
     {
-        base.OnDeselectionPanel();
+        
     }
 }

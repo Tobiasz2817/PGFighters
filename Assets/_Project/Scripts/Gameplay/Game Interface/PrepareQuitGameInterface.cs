@@ -9,40 +9,55 @@ using UnityEngine.SceneManagement;
 
 public class PrepareQuitGameInterface : MonoBehaviour {
     [SerializeField] private TMP_Text leavingText;
+    [SerializeField] private int lengthLoadingDot = 3;
+    
     [SerializeField] private TMP_Text gameOverText;
     [SerializeField] private int timePreparing;
-
     [SerializeField] private float punchDuration = 1f;
     [SerializeField] private float sizeScale = 5f;
+
+    [SerializeField] private GameObject dot;
+    [SerializeField] private float dotResize = 40f;
+    [SerializeField] private float dotDuration = 2f;
+    
+    private bool isLoading = true;
 
     public static event Action OnGameOverInterfaceFinish;
     public void InvokePreparedGame(string finishedText) {
         gameObject.SetActive(true);
-        StartCoroutine(InvokePreparingGameOver(1, finishedText));
+        StartCoroutine(InvokePreparingGameOver(finishedText));
     }
 
-    private IEnumerator InvokePreparingGameOver(float timeToPrepaingScene, string finishedText) {
-        yield return new WaitForSeconds(timeToPrepaingScene);
+    private IEnumerator InvokePreparingGameOver(string finishedText) {
+
+        StartCoroutine(LeaveLoading());
+        DotResize();
         yield return VisualizerQuitInterface(finishedText);
-        //yield return DownTime();
-        
+        yield return new WaitForSeconds(timePreparing);
+        isLoading = true;
+
         OnGameOverInterfaceFinish?.Invoke();
     }
 
     private IEnumerator VisualizerQuitInterface(string finishedText) {
         gameOverText.text = finishedText;
         gameOverText.transform.DOScale(gameOverText.transform.localScale * sizeScale, punchDuration);
+
         yield return new WaitForSeconds(punchDuration);
     }
 
-    private IEnumerator DownTime() {
-        for (int i = timePreparing; i >= 0; i--) {
-            leavingText.text = "Leaving " + i;
-
-            yield return new WaitForSeconds(0.1f);
+    private IEnumerator LeaveLoading() {
+        while (isLoading) {
+            string x = ".";
+            for (int i = lengthLoadingDot; i > 0; i--) {
+                leavingText.text = "Loading " + x;
+                yield return new WaitForSeconds(0.75f);
+                x += " .";
+            }
         }
-
-        yield return new WaitForSeconds(timePreparing);
-        gameObject.SetActive(false);
+    }
+    
+    private void DotResize() {
+        dot.transform.DOScale(dotResize, dotDuration);
     }
 }

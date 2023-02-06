@@ -51,8 +51,6 @@ public class PlayerShooting : NetworkBehaviour
     }
     [ClientRpc]
     private void ShootClientRpc(ulong clientId, ulong bulletId) {
-        Debug.Log("OwnerClientId: " + OwnerClientId);
-        Debug.Log("ClientId: " + clientId);
         if (OwnerClientId != clientId || !IsOwner) return;
         gun.TryFire(clientId,bulletId,direction);
     }

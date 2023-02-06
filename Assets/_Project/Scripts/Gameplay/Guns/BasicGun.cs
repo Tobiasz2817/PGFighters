@@ -16,7 +16,8 @@ public class BasicGun : Gun
         bulletReference.transform.rotation = rotation;
         bulletReference.SetSenderId(senderId);
         bulletReference.SetSpeed(speedBullet);
-        bulletReference.SetParticleVelocity(bulletDirection);
         bulletReference.MoveTowards(direction);
+        
+        Debug.Log("TAK");
     }
 }
