@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,16 +10,18 @@ public abstract class Gun : MonoBehaviour
     [SerializeField] protected float speedBullet;
     [SerializeField] protected Bullet bullet;
     [SerializeField] protected Transform shootPoint;
-
     private bool canShoot = true;
+    public bool CanShoot { private set => canShoot = value; get => canShoot; }
+    public int gunId;
+    protected PlayerBulletPoller playerBulletPoller;
     private Vector3 direction;
-    
-    public void TryFire(ulong senderId, ulong bulletId, Vector3 direction) {
+
+    public void TryFire(ulong senderId, Vector3 direction) {
         if (canShoot) {
             this.direction = direction;
             
             StartCoroutine(ShootDelay());
-            Fire(senderId,bulletId,direction);
+            Fire(senderId,direction);
         }
     }
     
@@ -28,7 +31,7 @@ public abstract class Gun : MonoBehaviour
         canShoot = true;
     }
 
-    protected abstract void Fire(ulong senderId, ulong bulletId, Vector3 direction);
+    protected abstract void Fire(ulong senderId, Vector3 direction);
 
     public Bullet GetGunBullet() {
         return bullet;
@@ -36,5 +39,20 @@ public abstract class Gun : MonoBehaviour
 
     public Transform GetShootPoint() {
         return shootPoint;
+    }
+
+    private void OnEnable() {
+        var pbp = GetComponentInParent<PlayerBulletPoller>();
+        if (pbp != null) {
+            playerBulletPoller = pbp;
+        }
+        else {
+            Debug.Log("CANT FIND PLAYERBULLETPOLLER");
+        }
+    }
+
+    private void OnTransformParentChanged() {
+        playerBulletPoller = GetComponentInParent<PlayerBulletPoller>();
+        Debug.Log("ON CHANGE  PARENT: " + playerBulletPoller);
     }
 }

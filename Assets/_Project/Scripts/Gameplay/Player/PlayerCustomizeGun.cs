@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ public class PlayerCustomizeGun : NetworkBehaviour
     public PlayerEquipmentData playerEquipmentData { private set; get; }
     public PlayerShooting playerShooting { private set; get; }
     public Gun currentGun { private set; get; }
+    public static event Action<Gun> OnGunChanged; 
 
     private void Awake() {
         playerEquipmentData = GetComponent<PlayerEquipmentData>();
@@ -18,10 +20,11 @@ public class PlayerCustomizeGun : NetworkBehaviour
 
     public override void OnNetworkSpawn() {
         if (!IsOwner) return;
-        
+
         EquipGunServerRpc("+ R Hand",0);
     }
     
+
     [ServerRpc(RequireOwnership = false)]
     private void EquipGunServerRpc(string content,int index) {
         EquipGunClientRpc(content,index);
@@ -32,8 +35,10 @@ public class PlayerCustomizeGun : NetworkBehaviour
         currentGun = Instantiate( GunData.Instance.GetGun(index), playerEquipmentData.GetContent(content));
         currentGun.transform.localPosition = Vector3.zero;
         currentGun.transform.localRotation = Quaternion.identity;
-
+        currentGun.gunId = index;
+        
         playerShooting.SetGunReferences(currentGun);
+        OnGunChanged?.Invoke(currentGun);
         Debug.Log(currentGun.transform.name);
     }
 }

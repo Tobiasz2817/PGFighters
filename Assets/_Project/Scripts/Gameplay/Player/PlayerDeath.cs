@@ -27,13 +27,12 @@ public class PlayerDeath : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     private void DisablePlayerServerRpc(ulong id) {
-        DisablePlayerClientRpc(id);
-    }
-    [ClientRpc]
-    private void DisablePlayerClientRpc(ulong id) {
         var player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id);
         if (player == null) return;
-        player.gameObject.SetActive(false);
-        Debug.Log(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id).gameObject.name);
+        DisableActivePlayerClientRpc();
+    }
+    [ClientRpc]
+    private void DisableActivePlayerClientRpc() {
+        gameObject.SetActive(false);
     }
 }
