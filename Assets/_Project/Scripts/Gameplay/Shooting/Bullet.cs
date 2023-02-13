@@ -1,11 +1,12 @@
 using System;
+using System.Collections;
 using Smooth;
 using Unity.Netcode;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public abstract class Bullet : NetworkBehaviour
 {
-    [SerializeField] private ParticleSystem particleSystem;
     [field: SerializeField] public float Damage { private set; get; }
     public ulong senderId { private set; get; }
     
@@ -13,6 +14,7 @@ public abstract class Bullet : NetworkBehaviour
     protected float speed;
     
     private bool canMove;
+    private ObjectPoller objectPoller;
     
     public void SetSpeed(float speed_) {
         this.speed = speed_;
@@ -25,40 +27,52 @@ public abstract class Bullet : NetworkBehaviour
 
         canMove = true;
     }
-    /*public void SetParticleVelocity(float x,float y,float z) {
-        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.main.maxParticles];
-        int count = particleSystem.GetParticles(particles);
-        for (int i = 0; i < count; i++) {
-            particles[i].velocity = new Vector3(x,y,z) * speed;
-        }
-        particleSystem.SetParticles(particles, count);
-    }*/
+
     protected abstract void MoveTo();
 
     protected void DisableSelf() {
-        this.gameObject.SetActive(false);
+        if (objectPoller == null) return; 
+            
+        objectPoller.PollObject(gameObject);
     }
     
     #region Unity function
-    private void OnDisable() {
-        if (IsOwner) return;
-        Spawner.Instance.DespawnObjectServerRpc(NetworkObjectId,true);
+    private void OnTransformParentChanged() {
+        objectPoller = GetComponent<ObjectPoller>();
+        Debug.Log("Change Parent");
     }
-    private void Update() { if (!canMove) return; MoveTo(); }
+    private void OnEnable() {
+        StartCoroutine(DeActiveSelf(10f));
+    }
+
+    private void FixedUpdate() { if (!canMove) return; MoveTo(); }
     private void OnTriggerEnter(Collider other) {
         Debug.Log("WTFFF");
-        Debug.Log("Other: " + other.name + " Self: " + OwnerClientId + " ObjectId: " + NetworkObjectId + " Is Owner: " + IsOwner);
+        //Debug.Log("Other: " + other.name + " Self: " + OwnerClientId + " ObjectId: " + NetworkObjectId + " Is Owner: " + IsOwner);
 
-        DisableSelf();
-        if (IsOwner) return;
-
+        if (other.CompareTag("Bullet")) return;
         if (other.CompareTag("Player") ) {
             var playerReference = other.GetComponent<PlayerReference>();
+            if (IsOwner || !playerReference.playerHealth.IsOwner) return;
+            
             if (playerReference != null) {
                 playerReference.playerHealth.DealDamage(this);
             }
         }
-        
+        DisableSelf();
     }
     #endregion
+
+    private IEnumerator DeActiveSelf(float time) {
+        yield return new WaitForSeconds(time);
+        DisableSelf();
+    }
 }
+/*public void SetParticleVelocity(float x,float y,float z) {
+    ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.main.maxParticles];
+    int count = particleSystem.GetParticles(particles);
+    for (int i = 0; i < count; i++) {
+        particles[i].velocity = new Vector3(x,y,z) * speed;
+    }
+    particleSystem.SetParticles(particles, count);
+}*/

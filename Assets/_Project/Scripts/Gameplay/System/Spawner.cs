@@ -24,6 +24,11 @@ public class Spawner : NetworkBehaviour
         spawnedObj.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
         return spawnedObj;
     }
+    public T SpawnNetworkObjectWithOwnership<T>(T obj, ulong clientId) where T : Object {
+        T spawnedObj = Instantiate(obj);
+        spawnedObj.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
+        return spawnedObj;
+    }
     public T SpawnNetworkObject<T>(T obj, Vector3 position,Quaternion rotation, Transform parent) where T : Object {
         T spawnedObj = Instantiate(obj,position,rotation,parent);
         spawnedObj.GetComponent<NetworkObject>().Spawn();

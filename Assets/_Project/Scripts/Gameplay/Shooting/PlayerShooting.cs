@@ -32,27 +32,16 @@ public class PlayerShooting : NetworkBehaviour
     }
 
     private void Shoot(InputAction.CallbackContext inputs) {
+        if (!IsOwner) return;
         if (GameManager.Instance.GetGameState() != GameManager.GameState.Started) return;
-        
-        SpawnBulletServerRpc(OwnerClientId);
-        
-        Debug.Log("Dir Bullet: " + direction);
+        if (gun.CanShoot) {
+            ShootBullet();
+            Debug.Log("I Shooting");
+        }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnBulletServerRpc(ulong clientId) {
-        var playerShooting = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId).GetComponent<PlayerShooting>();
-        var shootPoint = playerShooting.gun.GetShootPoint();
-        var bulletReference = playerShooting.gun.GetGunBullet();
-
-        var spawnedBullet = Spawner.Instance.SpawnNetworkObjectWithOwnership(bulletReference, shootPoint.position, Quaternion.identity,clientId);
-        ShootClientRpc(clientId,spawnedBullet.NetworkObjectId);
-
-    }
-    [ClientRpc]
-    private void ShootClientRpc(ulong clientId, ulong bulletId) {
-        if (OwnerClientId != clientId || !IsOwner) return;
-        gun.TryFire(clientId,bulletId,direction);
+    private void ShootBullet() {
+        gun.TryFire(OwnerClientId,direction);
     }
     private void ReadDirection(RaycastHit hit) {
         direction = hit.point;
