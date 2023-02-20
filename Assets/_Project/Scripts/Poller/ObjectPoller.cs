@@ -125,6 +125,6 @@ public class ObjectPoller : NetworkBehaviour
 
         foreach (var networkObject in listObjects) 
             if (!networkObject.gameObject.activeInHierarchy) 
-                networkObject.transform.position = ownerGun.GetShootPoint().position;
+               networkObject .transform.position = ownerGun.GetShootPoint().position;
     }
 }

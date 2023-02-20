@@ -13,8 +13,10 @@ public class Rocket : NetworkBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
+        
         if(!IsServer) return;
 
+        
         StateVisiblyServerRpc(false);
     }
 
