@@ -35,15 +35,24 @@ public class PrepareQuitGame : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     private void PreparedGameOverServerRpc(ulong losePlayerId) {
-        PreparingGameOverClientRpc(losePlayerId);
+        ulong idLosePlayer = default;
+        foreach (var client in NetworkManager.Singleton.ConnectedClients) {
+            var player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(client.Key);
+            var tmpPlayer = player.GetComponent<PlayerHealth>();
+            if (tmpPlayer.GetHealth() <= 0) {
+                idLosePlayer = tmpPlayer.OwnerClientId;
+                break;
+            }
+        }
+        PreparingGameOverClientRpc(idLosePlayer);
     }
 
     [ClientRpc]
     private void PreparingGameOverClientRpc(ulong losePlayerId) {
         Debug.Log("PreparingGameOverClientRpc");
         Debug.Log("Owner Id: " + OwnerClientId + " Lose client Id: " + losePlayerId);
-
-        var endText = IsOwner ? "You Win" : "You Lose";
+        var LocalPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
+        var endText = LocalPlayer.OwnerClientId != losePlayerId ? "You Win" : "You Lose";
         preparedGameOverInterface.InvokePreparedGame(endText);
     }
 

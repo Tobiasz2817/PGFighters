@@ -9,6 +9,12 @@ public class PlayerShooting : NetworkBehaviour
     [SerializeField] private Gun gun;
     private PlayerInput playerInput;
     private Vector3 direction;
+    
+    [SerializeField] private Rocket rocket;
+    [SerializeField] private float rocketPower;
+
+    [SerializeField] private Animator anim;
+    
     public override void OnNetworkSpawn() {
         if (!IsOwner) {
             this.enabled = false;
@@ -16,6 +22,7 @@ public class PlayerShooting : NetworkBehaviour
         }
         
         playerInput.currentActionMap["Shoot"].performed += Shoot;
+        playerInput.currentActionMap["TestShoot"].performed += ShootTest;
         CameraRay.OnDetected += ReadDirection;
     }
 
@@ -23,6 +30,7 @@ public class PlayerShooting : NetworkBehaviour
         if (!IsOwner) return;
 
         playerInput.currentActionMap["Shoot"].performed -= Shoot;
+        playerInput.currentActionMap["TestShoot"].performed -= ShootTest;
         CameraRay.OnDetected -= ReadDirection;
     }
 
@@ -35,9 +43,30 @@ public class PlayerShooting : NetworkBehaviour
         if (!IsOwner) return;
         if (GameManager.Instance.GetGameState() != GameManager.GameState.Started) return;
         if (gun.CanShoot) {
-            ShootBullet();
-            Debug.Log("I Shooting");
+            AnimTriggerServerRpc("Shoot");
         }
+    }
+    private void ShootTest(InputAction.CallbackContext inputs) {
+        if (!IsOwner) return;
+        if (GameManager.Instance.GetGameState() != GameManager.GameState.Started) return;
+        ShootRocketServerRpc(rocketPower,direction.x,direction.y,direction.z);
+    }
+
+    public void Shooting() {
+        if (!IsOwner) return;
+
+        ShootBullet();
+        Debug.Log("I Shooting");
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ShootRocketServerRpc(float power,float x,float y, float z) {
+        Vector3 direction = (new Vector3(x,y,z) - gun.GetShootPoint().transform.position).normalized;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        rotation.z = 0;
+        rotation.x = 0;
+        var rocket = Spawner.Instance.SpawnNetworkObject(this.rocket, gun.GetShootPoint().position, rotation);
+        rocket.ImpulseRocket(power, new Vector3(x,y,z));
     }
 
     private void ShootBullet() {
@@ -52,5 +81,14 @@ public class PlayerShooting : NetworkBehaviour
     
     public Gun GetGunReference() {
         return gun;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void AnimTriggerServerRpc(string nameTrigger) {
+        AnimTriggerClientRpc(nameTrigger);
+    }
+    [ClientRpc]
+    private void AnimTriggerClientRpc(string nameTrigger) {
+        anim.SetTrigger(nameTrigger);
     }
 }

@@ -34,4 +34,8 @@ public class PlayerHealth : NetworkBehaviour
     public void TakeDamage(float damage) {
         ChangeHealth(health - damage);
     }
+
+    public float GetHealth() {
+        return health;
+    }
 }

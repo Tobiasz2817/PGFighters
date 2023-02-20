@@ -12,18 +12,16 @@ public class BasicGun : Gun
         rotation.z = 0;
         rotation.x = 0;
 
-        Debug.Log("playerBulletPoller: " + playerBulletPoller);
         var obj = playerBulletPoller.ObjectPoller.GetObject();
         if (obj == null) {
             Debug.Log("NIE ZNALEZIONO OBIEKTU");
+
+            return;
         }
-        var bulletReference = obj.GetComponent<Bullet>();
-        bulletReference.transform.rotation = rotation;
+        var bulletReference = obj.gameObject.GetComponent<Bullet>();
         bulletReference.SetSenderId(senderId);
         bulletReference.SetSpeed(speedBullet);
+        bulletReference.transform.rotation = rotation;
         bulletReference.MoveTowards(direction);
-        bulletReference.gameObject.SetActive(true);
-        
-        Debug.Log("TAK");
     }
 }
