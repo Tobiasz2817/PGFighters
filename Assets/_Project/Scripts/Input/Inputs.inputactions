@@ -79,6 +79,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TestShoot",
+                    "type": "Button",
+                    "id": "ce69c8e2-fc7b-42be-9593-16a3eebacdac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -156,6 +165,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31bc0bd8-926b-45fe-8096-946e2f50f90a",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TestShoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
