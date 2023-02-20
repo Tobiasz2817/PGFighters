@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerBulletPoller : NetworkBehaviour
 {
     [SerializeField] private ObjectPoller objectPollerPrefab;
+    [SerializeField] private int countStartedBullets = 15;
+    [field: SerializeField] 
     public ObjectPoller ObjectPoller { private set; get; }
 
     public override void OnNetworkSpawn() {
@@ -26,9 +28,16 @@ public class PlayerBulletPoller : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void CreatePollerServerRpc(int indexGun, ulong clientId) {
         var poller = Spawner.Instance.SpawnNetworkObjectWithOwnership(objectPollerPrefab, clientId);
-        ObjectPoller = poller;
-        poller.InitPoller(GunData.Instance.GetGun(indexGun).GetGunBullet().gameObject,5);
-        poller.CreatePoller();
+        poller.InitPoller(GunData.Instance.GetGun(indexGun).GetGunBullet().gameObject,countStartedBullets);
+        poller.CreatePoller(NetworkObjectId);
+
+        SetRefPollerClientRpc(poller.NetworkObjectId);
+    }
+    
+    [ClientRpc]
+    private void SetRefPollerClientRpc(ulong pollerId) {
+        var pollerRef = NetworkManager.Singleton.SpawnManager.SpawnedObjects[pollerId].GetComponent<ObjectPoller>();
+        ObjectPoller = pollerRef;
     }
 
 }
