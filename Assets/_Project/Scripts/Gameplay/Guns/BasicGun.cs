@@ -14,7 +14,7 @@ public class BasicGun : Gun
 
         var obj = playerBulletPoller.ObjectPoller.GetObject();
         if (obj == null) {
-            Debug.Log("NIE ZNALEZIONO OBIEKTU");
+            //Debug.Log("NIE ZNALEZIONO OBIEKTU");
 
             return;
         }

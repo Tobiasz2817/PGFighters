@@ -11,6 +11,7 @@ public class PlayerShooting : NetworkBehaviour
     private Vector3 direction;
     
     [SerializeField] private Rocket rocket;
+    [SerializeField] public Transform rocketShootPoint;
     [SerializeField] private float rocketPower;
 
     [SerializeField] private Animator anim;
@@ -49,7 +50,7 @@ public class PlayerShooting : NetworkBehaviour
     private void ShootTest(InputAction.CallbackContext inputs) {
         if (!IsOwner) return;
         if (GameManager.Instance.GetGameState() != GameManager.GameState.Started) return;
-        ShootRocketServerRpc(rocketPower,direction.x,direction.y,direction.z);
+        ShootRocketServerRpc(rocketPower,direction.x,direction.y,direction.z,OwnerClientId);
     }
 
     public void Shooting() {
@@ -60,13 +61,17 @@ public class PlayerShooting : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ShootRocketServerRpc(float power,float x,float y, float z) {
-        Vector3 direction = (new Vector3(x,y,z) - gun.GetShootPoint().transform.position).normalized;
+    private void ShootRocketServerRpc(float power,float x,float y, float z, ulong id) {
+
+        var player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id);
+        var playerShooting = player.GetComponent<PlayerShooting>();
+        
+        Vector3 direction = (new Vector3(x,y,z) - playerShooting.rocketShootPoint.position).normalized;
         Quaternion rotation = Quaternion.LookRotation(direction);
         rotation.z = 0;
         rotation.x = 0;
-        var rocket = Spawner.Instance.SpawnNetworkObject(this.rocket, gun.GetShootPoint().position, rotation);
-        rocket.ImpulseRocket(power, new Vector3(x,y,z));
+        var rocket = Spawner.Instance.SpawnNetworkObject(this.rocket, playerShooting.rocketShootPoint.position, rotation);
+        rocket.ImpulseRocket(power  * Time.deltaTime, new Vector3(x,y,z));
     }
 
     private void ShootBullet() {
