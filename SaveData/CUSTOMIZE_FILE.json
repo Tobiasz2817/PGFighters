@@ -1,0 +1,233 @@
+†?{
+    "Items": {
+        "keyData": [
+            "CUSTOMIZE_PART_1",
+            "CUSTOMIZE_PART_2",
+            "CUSTOMIZE_PART_3"
+        ],
+        "valueData": [
+            {
+                "Items": [
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Ears",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Eyes",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Hat",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Mouth",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Shoulder",
+                        "secoundPart": "Left Shoulder",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Shoulder",
+                        "secoundPart": "Right Shoulder",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Forearm",
+                        "secoundPart": "Left Forearm",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Forearm",
+                        "secoundPart": "Right Forearm",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Bag",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Chest",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Ring",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Calf",
+                        "secoundPart": "Left Calf",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Calf",
+                        "secoundPart": "Right Calf",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Color",
+                        "secoundPart": "Color",
+                        "index": -1
+                    }
+                ]
+            },
+            {
+                "Items": [
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Ears",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Eyes",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Hat",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Mouth",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Shoulder",
+                        "secoundPart": "Left Shoulder",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Shoulder",
+                        "secoundPart": "Right Shoulder",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Forearm",
+                        "secoundPart": "Left Forearm",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Forearm",
+                        "secoundPart": "Right Forearm",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Bag",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Chest",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Ring",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Calf",
+                        "secoundPart": "Left Calf",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Calf",
+                        "secoundPart": "Right Calf",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Color",
+                        "secoundPart": "Color",
+                        "index": -1
+                    }
+                ]
+            },
+            {
+                "Items": [
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Ears",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Eyes",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Hat",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Head",
+                        "secoundPart": "Mouth",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Shoulder",
+                        "secoundPart": "Left Shoulder",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Shoulder",
+                        "secoundPart": "Right Shoulder",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Forearm",
+                        "secoundPart": "Left Forearm",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Forearm",
+                        "secoundPart": "Right Forearm",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Bag",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Chest",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Torso",
+                        "secoundPart": "Ring",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ L Calf",
+                        "secoundPart": "Left Calf",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ R Calf",
+                        "secoundPart": "Right Calf",
+                        "index": -1
+                    },
+                    {
+                        "contentName": "+ Color",
+                        "secoundPart": "Color",
+                        "index": -1
+                    }
+                ]
+            }
+        ]
+    }
+}
