@@ -16,5 +16,4 @@ public class ButtonPanelHandler : MonoBehaviour
     {
         OnButtonClick?.Invoke(_panel);
     }
-    
 }

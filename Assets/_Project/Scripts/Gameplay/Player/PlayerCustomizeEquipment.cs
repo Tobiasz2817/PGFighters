@@ -13,9 +13,9 @@ public class PlayerCustomizeEquipment : NetworkBehaviour
     }
 
     public override void OnNetworkSpawn() {
-        
         if (!IsOwner) return;
-        
+
+        if (CustomizeCharacterEquipmentData.Instance == null) return;
         foreach (var customize in CustomizeCharacterEquipmentData.Instance.GetCustomizeSelections())
             if (customize.index != -1) 
                 SetEquipmentServerRpc(customize.contentName,customize.index);

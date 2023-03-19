@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -19,11 +21,13 @@ public class PlayerEquipmentData : NetworkBehaviour
         Dictionary<string, Transform> tmp = new Dictionary<string, Transform>();
         var compo = body.transform.GetComponentsInChildren<Transform>();
 
+        if (CustomizeCharacterEquipmentData.Instance == null) return null;
+        
         foreach (var child in compo)
-            foreach (var contentKey in CustomizeCharacterEquipmentData.Instance.GetHeaders())
-                if (child.name == contentKey || child.name == "+ R Hand" || child.name == "+ L Hand") 
-                    if(!tmp.ContainsKey(child.name))
-                        tmp.Add(child.name, child);
+            if (child.name == "+ R Hand" || child.name == "+ L Hand" || CustomizeCharacterEquipmentData.Instance != null && CustomizeCharacterEquipmentData.Instance.GetHeaders().Contains(child.name)) 
+                if(!tmp.ContainsKey(child.name))
+                    tmp.Add(child.name, child);
+
         return tmp;
     }
 
