@@ -1,15 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
+using Utilities;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Singleton<GameManager> {
 
     public static GameManager Instance;
-
-    private GameState gameState = GameState.Preparing;
 
     public Action StartedGame;
     public Action PauseGame;
@@ -18,11 +13,13 @@ public class GameManager : MonoBehaviour {
     public static event Action OnGameStarted;
     public static event Action<ulong> OnGameOverHandler;
 
-    public void Awake() {
-        Instance = this;
-        Debug.Log("Game Manager Awake");
+    private GameState currentState = GameState.Preparing;
+    public GameState CurrentState
+    {
+        private set => currentState = value;
+        get => currentState;
     }
-
+    
     private void OnEnable() {
         StartedGame += StartGame;
         GameIsOver += GameOver;
@@ -35,21 +32,18 @@ public class GameManager : MonoBehaviour {
 
     private void StartGame() {
         ChangeGameState(GameState.Started);
-        
         OnGameStarted?.Invoke();
     }
     private void GameOver(ulong losePlayerId) {
         ChangeGameState(GameState.End);
-        Debug.Log("Game Over");
         OnGameOverHandler?.Invoke(losePlayerId);
     }
-    private void ChangeGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-    public GameState GetGameState() {
-        return gameState;
-    }
+
     
+    private void ChangeGameState(GameState gameState) {
+        this.currentState = gameState;
+    }
+
     public enum GameState
     {
         Preparing,

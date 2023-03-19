@@ -42,14 +42,14 @@ public class PlayerShooting : NetworkBehaviour
 
     private void Shoot(InputAction.CallbackContext inputs) {
         if (!IsOwner) return;
-        if (GameManager.Instance.GetGameState() != GameManager.GameState.Started) return;
+        if (GameManager.Instance.CurrentState != GameManager.GameState.Started) return;
         if (gun.CanShoot) {
             AnimTriggerServerRpc("Shoot");
         }
     }
     private void ShootTest(InputAction.CallbackContext inputs) {
         if (!IsOwner) return;
-        if (GameManager.Instance.GetGameState() != GameManager.GameState.Started) return;
+        if (GameManager.Instance.CurrentState != GameManager.GameState.Started) return;
         ShootRocketServerRpc(rocketPower,direction.x,direction.y,direction.z,OwnerClientId);
     }
 

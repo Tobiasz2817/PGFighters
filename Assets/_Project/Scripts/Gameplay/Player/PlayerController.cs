@@ -46,7 +46,7 @@ public class PlayerController : NetworkBehaviour
     }
 
     private void Update() {
-        if (GameManager.Instance.GetGameState() != GameManager.GameState.Started) return;
+        if (GameManager.Instance.CurrentState != GameManager.GameState.Started) return;
         
         RotateCharacter();
         MoveCharacter();
