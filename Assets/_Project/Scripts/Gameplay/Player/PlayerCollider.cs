@@ -25,13 +25,10 @@ public class PlayerCollider : NetworkBehaviour {
         var bullet = other.GetComponent<Bullet>();
 
         if (bullet != null) {
-            if(!bullet.IsOwner) {
-                OnCollision?.Invoke(other);
-                
-                Debug.Log("TAK");
-            }
-            Debug.Log(" Bullet sender Id:" + bullet.senderId + " OwnerCliend Id:" + OwnerClientId + " Owner: " + IsOwner + " Bullet owner: " + bullet.IsOwner);
+            OnCollision?.Invoke(other);
             
+            Debug.Log("TAK");
+
             other.gameObject.SetActive(false);
         }
         
