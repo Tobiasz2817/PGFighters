@@ -1,10 +1,7 @@
-
-using System;
 using System.Collections;
-using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Gun : MonoBehaviour
+public abstract class Gun : PolledObject
 {
     [SerializeField] protected float shootDelay;
     [SerializeField] protected float speedBullet;
@@ -12,14 +9,9 @@ public abstract class Gun : MonoBehaviour
     [SerializeField] protected Transform shootPoint;
     private bool canShoot = true;
     public bool CanShoot { private set => canShoot = value; get => canShoot; }
-    public int gunId;
-    protected PlayerBulletPoller playerBulletPoller;
-    private Vector3 direction;
 
     public void TryFire(ulong senderId, Vector3 direction) {
         if (canShoot) {
-            this.direction = direction;
-            
             StartCoroutine(ShootDelay());
             Fire(senderId,direction);
         }
@@ -41,18 +33,11 @@ public abstract class Gun : MonoBehaviour
         return shootPoint;
     }
 
-    private void OnEnable() {
-        var pbp = GetComponentInParent<PlayerBulletPoller>();
-        if (pbp != null) {
-            playerBulletPoller = pbp;
-        }
-        else {
-            Debug.Log("CANT FIND PLAYERBULLETPOLLER");
-        }
-    }
-
-    private void OnTransformParentChanged() {
-        playerBulletPoller = GetComponentInParent<PlayerBulletPoller>();
-        Debug.Log("ON CHANGE  PARENT: " + playerBulletPoller);
-    }
+    public void ReverseBullets() {
+        /*var index = NetworkPoller.Instance.GetIndexPrefab(ownerId, ObjectPollTypes.GunBullets, bullet.GetType());
+        if (index == -1) {
+            Debug.Log("Error: " + index + " Can't reversing object on this type because didn't exist");
+        }*/
+        NetworkPoller.Instance.ReversObjects(ownerId,ObjectPollTypes.GunBullets,bullet.GetType());
+    } 
 }

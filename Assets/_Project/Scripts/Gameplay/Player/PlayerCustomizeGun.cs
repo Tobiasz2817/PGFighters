@@ -4,37 +4,52 @@ using UnityEngine;
 
 public class PlayerCustomizeGun : NetworkBehaviour
 {
+    public GunPickUp gunPickUp { private set; get; }
     public PlayerEquipmentData playerEquipmentData { private set; get; }
-    public PlayerShooting playerShooting { private set; get; }
-    public Gun currentGun { private set; get; }
-    public static event Action<Gun> OnGunChanged; 
+
+    private Gun currentGun;
 
     private void Awake() {
         playerEquipmentData = GetComponent<PlayerEquipmentData>();
-        playerShooting = GetComponent<PlayerShooting>();
+        gunPickUp = GetComponent<GunPickUp>();
     }
 
     public override void OnNetworkSpawn() {
-        if (!IsOwner) return;
+        gunPickUp.OnGunPickUp += EquipGun;
+    }
+    
+    public override void OnNetworkDespawn() {
+        gunPickUp.OnGunPickUp -= EquipGun;
+    }
 
-        EquipGunServerRpc("+ R Hand",0);
+    private void EquipGun(ulong ownerId,int index) {
+        TryPollCurrentGun();
+        EquipGun("+ R Hand",index,ownerId);
     }
     
 
     [ServerRpc(RequireOwnership = false)]
-    private void EquipGunServerRpc(string content,int index) {
-        EquipGunClientRpc(content,index);
+    private void EquipGunServerRpc(string content,int index, ulong ownerId) {
+        EquipGunClientRpc(content,index,ownerId);
     }
     
     [ClientRpc]
-    private void EquipGunClientRpc(string content,int index) {
-        currentGun = Instantiate( GunData.Instance.GetGun(index), playerEquipmentData.GetContent(content));
+    private void EquipGunClientRpc(string content,int index, ulong ownerId) {
+        EquipGun(content,index,ownerId);
+    }
+    private void EquipGun(string content,int index, ulong ownerId) {
+        currentGun = (Gun)NetworkPoller.Instance.GetActiveObject(ownerId, ObjectPollTypes.Guns,index);
+        var gunBarrierHandler = currentGun.transform.GetComponentInChildren<GunBarrierHandler>();
+        if (gunBarrierHandler) gunBarrierHandler.ControlStateObject(false);
+        currentGun.ReverseBullets();
+        currentGun.transform.parent = playerEquipmentData.GetContent(content);
         currentGun.transform.localPosition = Vector3.zero;
         currentGun.transform.localRotation = Quaternion.identity;
-        currentGun.gunId = index;
-        
-        playerShooting.SetGunReferences(currentGun);
-        OnGunChanged?.Invoke(currentGun);
-        Debug.Log(currentGun.transform.name);
+        currentGun.gameObject.SetActive(true);
+    }
+
+    private void TryPollCurrentGun() {
+        if (!currentGun) return;
+        NetworkPoller.Instance.PollObject(currentGun);
     }
 }

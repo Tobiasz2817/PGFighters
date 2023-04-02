@@ -50,7 +50,7 @@
             ]
         },
         {
-            "name": "Player",
+            "name": "KeyboardCharacter",
             "id": "3591744f-7134-44d7-acb3-90d56a6e0994",
             "actions": [
                 {
@@ -58,15 +58,6 @@
                     "type": "Value",
                     "id": "549f3851-fc5e-4eb8-b366-efffa3113927",
                     "expectedControlType": "Vector3",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Mouse",
-                    "type": "Value",
-                    "id": "bf4166cd-440a-4481-8f58-d37c9d721bd5",
-                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -148,17 +139,6 @@
                 },
                 {
                     "name": "",
-                    "id": "2cadda4d-be52-4801-9a36-8597f9b127ec",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Mouse",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "c6742dc1-fbca-4a19-95c0-3126b7b74288",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -204,6 +184,62 @@
                     "processors": "",
                     "groups": "",
                     "action": "Mouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Mouse",
+            "id": "1f198974-80b8-46c5-a756-a71ae94ba032",
+            "actions": [
+                {
+                    "name": "Mouse",
+                    "type": "Value",
+                    "id": "a2ed788c-b3ec-4be1-8561-3a709176e500",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b8a4564f-9e8f-467a-b095-5cb34287f895",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Lobby",
+            "id": "f72ef585-e8f3-434a-8540-4cdebf28ff51",
+            "actions": [
+                {
+                    "name": "Exit",
+                    "type": "Button",
+                    "id": "df9ce567-0ae2-4f2d-91cc-5d0d450d38d0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7d516f22-dd6b-4b78-a61b-aba7f97ff76b",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Exit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

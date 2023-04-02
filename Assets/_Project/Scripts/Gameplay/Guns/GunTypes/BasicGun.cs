@@ -1,5 +1,3 @@
-using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BasicGun : Gun
@@ -12,13 +10,8 @@ public class BasicGun : Gun
         rotation.z = 0;
         rotation.x = 0;
 
-        var obj = playerBulletPoller.ObjectPoller.GetObject();
-        if (obj == null) {
-            //Debug.Log("NIE ZNALEZIONO OBIEKTU");
-
-            return;
-        }
-        var bulletReference = obj.gameObject.GetComponent<Bullet>();
+        var bulletReference = NetworkPoller.Instance.GetObject<Bullet>(0,ObjectPollTypes.GunBullets);
+        bulletReference.gameObject.SetActive(true);
         bulletReference.SetSenderId(senderId);
         bulletReference.SetSpeed(speedBullet);
         bulletReference.transform.rotation = rotation;

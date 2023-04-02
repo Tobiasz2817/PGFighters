@@ -7,51 +7,78 @@ using UnityEngine.InputSystem;
 public class PlayerShooting : NetworkBehaviour
 {
     [SerializeField] private Gun gun;
+    [SerializeField] private GunPickUp pickUpGun;
     private PlayerInput playerInput;
     private Vector3 direction;
     
-    [SerializeField] private Rocket rocket;
-    [SerializeField] public Transform rocketShootPoint;
-    [SerializeField] private float rocketPower;
-
     [SerializeField] private Animator anim;
-    
+
     public override void OnNetworkSpawn() {
         if (!IsOwner) {
             this.enabled = false;
             return;
         }
         
+        pickUpGun.OnGunPickUp += SetGunReferences;
         playerInput.currentActionMap["Shoot"].performed += Shoot;
-        playerInput.currentActionMap["TestShoot"].performed += ShootTest;
+        playerInput.currentActionMap["TestShoot"].performed += Reversing;
         CameraRay.OnDetected += ReadDirection;
     }
 
     public override void OnNetworkDespawn() {
         if (!IsOwner) return;
 
+        pickUpGun.OnGunPickUp += SetGunReferences;
         playerInput.currentActionMap["Shoot"].performed -= Shoot;
-        playerInput.currentActionMap["TestShoot"].performed -= ShootTest;
+        playerInput.currentActionMap["TestShoot"].performed -= Reversing;
         CameraRay.OnDetected -= ReadDirection;
+    }
+
+    private bool tak = false;
+    private void Reversing(InputAction.CallbackContext obj) {
+        if (!tak) {
+            NetworkPoller.Instance.ReversObjectsServerRpc(OwnerClientId,ObjectPollTypes.GunBullets,1);
+        }
+        else
+            NetworkPoller.Instance.ReversObjectsServerRpc(OwnerClientId,ObjectPollTypes.GunBullets,0);
+
+        tak = !tak;
     }
 
     private void Awake() {
         playerInput = GetComponent<PlayerInput>();
         gun = GetComponent<Gun>();
+        pickUpGun = GetComponent<GunPickUp>();
     }
 
     private void Shoot(InputAction.CallbackContext inputs) {
         if (!IsOwner) return;
         if (GameManager.Instance.CurrentState != GameManager.GameState.Started) return;
-        if (gun.CanShoot) {
-            AnimTriggerServerRpc("Shoot");
+        Debug.Log(gun);
+
+        if (gun != null) {
+            if (gun.CanShoot) {
+                ShootServerRpc(OwnerClientId,direction);
+                Shoot(OwnerClientId,direction);
+                Debug.Log("Shooting");
+            }
         }
     }
-    private void ShootTest(InputAction.CallbackContext inputs) {
-        if (!IsOwner) return;
-        if (GameManager.Instance.CurrentState != GameManager.GameState.Started) return;
-        ShootRocketServerRpc(rocketPower,direction.x,direction.y,direction.z,OwnerClientId);
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void ShootServerRpc(ulong ownerId,Vector3 direction) {
+        ShootClientRpc(ownerId,direction);
     }
+    [ClientRpc]
+    private void ShootClientRpc(ulong ownerId,Vector3 direction) {
+        if (IsOwner) return;
+        Shoot(ownerId,direction);
+    }
+
+    private void Shoot(ulong ownerId, Vector3 direction) {
+        gun.TryFire(ownerId,direction);
+    }
+    
 
     public void Shooting() {
         if (!IsOwner) return;
@@ -60,27 +87,15 @@ public class PlayerShooting : NetworkBehaviour
         Debug.Log("I Shooting");
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void ShootRocketServerRpc(float power,float x,float y, float z, ulong id) {
-
-        var player = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id);
-        var playerShooting = player.GetComponent<PlayerShooting>();
-        
-        Vector3 direction = (new Vector3(x,y,z) - playerShooting.rocketShootPoint.position).normalized;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        rotation.z = 0;
-        rotation.x = 0;
-        var rocket = Spawner.Instance.SpawnNetworkObject(this.rocket, playerShooting.rocketShootPoint.position, rotation);
-        rocket.ImpulseRocket(power  * Time.deltaTime, new Vector3(x,y,z));
-    }
-
     private void ShootBullet() {
         gun.TryFire(OwnerClientId,direction);
     }
     private void ReadDirection(RaycastHit hit) {
         direction = hit.point;
     }
-    public void SetGunReferences(Gun gun_) {
+    public void SetGunReferences(ulong ownerId,int index) {
+        var gun_ = (Gun)NetworkPoller.Instance.GetActiveObject(ownerId, ObjectPollTypes.Guns, index);
+        if (gun_ == null) Debug.Log("Gun Reference are null");
         this.gun = gun_;
     }
     

@@ -9,45 +9,43 @@ using UnityEngine.SceneManagement;
 
 public class PlayerSpawn : NetworkBehaviour
 {
-    [SerializeField] private GameObject robotPrefab;
+    [SerializeField] private NetworkObject robotPrefab;
     [SerializeField] private Transform[] points;
+
+    public static event Action<List<ulong>> OnPlayersSpawned;
 
     public override void OnNetworkDespawn() {
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
-        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= ClientsLoadedEvent;
-        NetworkManager.Singleton.SceneManager.OnLoadComplete -= ClientsLoadedScene;
+
+        LoadingSceneManager.Instance.OnClientsConnected -= SpawnPlayers;
     }
 
     private void OnEnable() {
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
-        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += ClientsLoadedEvent;
-        NetworkManager.Singleton.SceneManager.OnLoadComplete += ClientsLoadedScene;
+        
+        LoadingSceneManager.Instance.OnClientsConnected += SpawnPlayers;
     }
     
     private void OnClientDisconnected(ulong disconnectId) {
         Debug.Log("Id: " + disconnectId);
     }
-
-    private void ClientsLoadedEvent(string scenename, LoadSceneMode loadscenemode, List<ulong> clientscompleted, List<ulong> clientstimedout) {
-        Debug.Log("ClientsLoadedEvent");
-        if (!IsServer) return;
-        SpawnPlayers(clientscompleted);
-        Debug.Log("Car is spawned");
-    }
-
-    private void ClientsLoadedScene(ulong clientid, string scenename, LoadSceneMode loadscenemode) {
-        Debug.Log("ClientsLoadedScene");
-    }
+    
     private void SpawnPlayers(List<ulong> clientscompleted) {
+        if (!IsServer) return;
+        
+        var list = new List<ulong>();
         foreach (var client in clientscompleted) {
-            Debug.Log(client);
-            SpawnRobot(client);
+            Debug.Log("Id: + " + client);
+            var robot = SpawnRobot(client);
+            if(robot != 250)
+                list.Add(robot);
         }
+        
+        OnPlayersSpawned?.Invoke(list);
     }
 
-    private void SpawnRobot(ulong id) {
-        if (NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(id) != null) return;
-        
-        Spawner.Instance.SpawnPlayer(robotPrefab, points[id].position, points[id].rotation, id);
+    private ulong SpawnRobot(ulong id) {
+        var obj = Spawner.Instance.SpawnPlayer(robotPrefab, points[id].position, points[id].rotation, id);
+        return obj.OwnerClientId;
     }
 }

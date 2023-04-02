@@ -1366,12 +1366,11 @@ GameObject:
   - component: {fileID: 8035021468144971755}
   - component: {fileID: 2255821797163629944}
   - component: {fileID: -6333962714924419921}
-  - component: {fileID: 7003393687112732699}
   - component: {fileID: 1038588321820566463}
   - component: {fileID: 4998020670368380274}
   - component: {fileID: 4135684936937500546}
   - component: {fileID: 204768812310160303}
-  - component: {fileID: 5521419884123577268}
+  - component: {fileID: 1950711921}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1603,21 +1602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d49fa7005a87c43a95282832d9f97c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
+  speed: 300
   smoothTime: 0.01
-  anim: {fileID: 678510153263458574}
---- !u!114 &7003393687112732699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472870066037193999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eac49df000a3409aabb40fa40abace64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1038588321820566463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1631,9 +1617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gun: {fileID: 0}
-  rocket: {fileID: 8761867259904773376, guid: 7d3736fce755455428b9594c3a930058, type: 3}
-  rocketShootPoint: {fileID: 1522813271574730861}
-  rocketPower: 300
+  pickUpGun: {fileID: 0}
   anim: {fileID: 678510153263458574}
 --- !u!114 &4998020670368380274
 MonoBehaviour:
@@ -1673,7 +1657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <playerHealth>k__BackingField: {fileID: 4998020670368380274}
---- !u!114 &5521419884123577268
+--- !u!114 &1950711921
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1682,12 +1666,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5472870066037193999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f53dbc6a9cea2040adb175be567f14b, type: 3}
+  m_Script: {fileID: 11500000, guid: f8f6602d3f0c9d4449e0e963a111f3aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPollerPrefab: {fileID: 1772255878011101504, guid: 997f85ee8f20c7f488cfb2cc7740adfa, type: 3}
-  countStartedBullets: 20
-  <ObjectPoller>k__BackingField: {fileID: 0}
 --- !u!1 &5504683712307842716
 GameObject:
   m_ObjectHideFlags: 0

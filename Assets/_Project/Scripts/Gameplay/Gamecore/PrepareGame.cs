@@ -9,11 +9,11 @@ public class PrepareGame : NetworkBehaviour
     public PreparedGameInterface preparedGameInterface;
     public override void OnNetworkSpawn() {
         if (!IsServer) return;
-
-        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += PreparingGame;
+        
+        LoadingSceneManager.Instance.OnClientsConnected += PreparingGame;
     }
 
-    private void PreparingGame(string scenename, LoadSceneMode loadscenemode, List<ulong> clientscompleted, List<ulong> clientstimedout) {
+    private void PreparingGame(List<ulong> clientscompleted) {
         PreparingGameClientRpc();
     }
     

@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class PollerData : MonoBehaviour
+public abstract class PollerData : MonoBehaviour
 {
-    public PolledObject prefab;
+    [HideInInspector]
+    public ulong ownerId;
+    public bool syncWithOwner = true;
     public int count = 1;
-    public bool isNetwork = false;
-}
-
-public enum ObjectPollTypes
-{
-    BulletType1,
-    BulletType2
+    public ObjectPollTypes objectPollTypes;
+    public abstract PolledObject GetPolledObject(int index);
+    public abstract List<PolledObject> CreatePolledObjects(Transform transform);
+    public abstract int GetIndexObjectsByType(Type type);
+    public abstract int GetPrefabsCount();
 }

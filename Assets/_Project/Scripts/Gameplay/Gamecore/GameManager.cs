@@ -2,10 +2,8 @@ using System;
 using UnityEngine;
 using Utilities;
 
-public class GameManager : Singleton<GameManager> {
-
-    public static GameManager Instance;
-
+public class GameManager : Singleton<GameManager> 
+{
     public Action StartedGame;
     public Action PauseGame;
     public Action<ulong> GameIsOver;
