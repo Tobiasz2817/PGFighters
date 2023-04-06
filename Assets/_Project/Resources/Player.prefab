@@ -1357,7 +1357,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5472870066037193998}
-  - component: {fileID: -1675713300325557727}
   - component: {fileID: 5472870066037193993}
   - component: {fileID: 567789119677887489}
   - component: {fileID: 5773550395110345814}
@@ -1371,6 +1370,7 @@ GameObject:
   - component: {fileID: 4135684936937500546}
   - component: {fileID: 204768812310160303}
   - component: {fileID: 1950711921}
+  - component: {fileID: 1158471359}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1395,64 +1395,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -10.34, z: 0}
---- !u!114 &-1675713300325557727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472870066037193999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: a3eb29c2057a67e4680d0dff82063b4d, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 5667b035-5407-4982-aac2-f653218d76ec
-    m_ActionName: Customize/Load[/Keyboard/a]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9b9a5069-d984-4233-a700-0bd25d33bf66
-    m_ActionName: Customize/Save[/Keyboard/d]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 549f3851-fc5e-4eb8-b366-efffa3113927
-    m_ActionName: Player/Movement[/Keyboard/a,/Keyboard/d,/Keyboard/w,/Keyboard/s]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: bf4166cd-440a-4481-8f58-d37c9d721bd5
-    m_ActionName: Player/Mouse[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b28fa51b-d125-464d-88e9-4fa3932df975
-    m_ActionName: Environment/Mouse[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 22c2b749-368f-46a6-8951-c2c23788d54c
-    m_ActionName: Player/Shoot[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: ce69c8e2-fc7b-42be-9593-16a3eebacdac
-    m_ActionName: Player/TestShoot[/Keyboard/k]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &5472870066037193993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1602,7 +1544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d49fa7005a87c43a95282832d9f97c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 300
+  speed: 35
   smoothTime: 0.01
 --- !u!114 &1038588321820566463
 MonoBehaviour:
@@ -1669,6 +1611,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8f6602d3f0c9d4449e0e963a111f3aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1158471359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5472870066037193999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e2247c37a24f945bb676e5f30c844e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 678510153263458574}
 --- !u!1 &5504683712307842716
 GameObject:
   m_ObjectHideFlags: 0

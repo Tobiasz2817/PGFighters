@@ -1,17 +1,15 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField] private float speed = 300f;
+    [SerializeField] private float speed = 15f;
     [SerializeField] private float smoothTime = 0.01f;
     
     private Vector3 inputMovement;
     private Vector3 rayPoint;
     
-    private PlayerInput playerInput;
     //private Rigidbody rigidbody;
 
     private Vector3 currentMovement;
@@ -19,21 +17,16 @@ public class PlayerController : NetworkBehaviour
 
     public override void OnNetworkSpawn() {
         if(!IsOwner) this.enabled = false;
-        Debug.Log("On Network Spawn");
-        
-        playerInput.currentActionMap["Movement"].performed += ReadMovement;
+
+        InputManager.Input.KeyboardCharacter.Movement.performed += ReadMovement;
         CameraRay.OnDetected += ReadRayVector3;
     }
 
     public override void OnNetworkDespawn() {
         if (!IsOwner) return;
         
-        playerInput.currentActionMap["Movement"].performed -= ReadMovement;
+        InputManager.Input.KeyboardCharacter.Movement.performed -= ReadMovement;
         CameraRay.OnDetected -= ReadRayVector3;
-    }
-
-    private void Awake() {
-        playerInput = GetComponent<PlayerInput>();
     }
 
     private void Update() {

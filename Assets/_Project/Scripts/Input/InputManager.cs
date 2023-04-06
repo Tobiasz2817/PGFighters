@@ -1,39 +1,50 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.InputSystem;
-using Utilities;
 
 public class InputManager
 {
-    public static BaseInput Input;
+    private static BaseInput input;
+    public static BaseInput Input
+    {
+        private set => input = value;
+        get {
+            if (!isInitialized)
+                InitReference();        
+            return input;
+        }
+    }
 
-    [RuntimeInitializeOnLoadMethod]
-    private void Awake() {
+    public static bool isInitialized = false;
+ 
+    private static void InitReference() {
         Input = new StandardInputs();
+        isInitialized = true;
     }
 }
-public abstract class BaseInput
+public abstract class BaseInput : Inputs
 {
-    public Action<InputAction.CallbackContext> OnGetMovement;
-    public Action<InputAction.CallbackContext> OnGetMouseDelta;
-    public Action<InputAction.CallbackContext> OnGetMousePosition;
-    public Action<InputAction.CallbackContext> OnLeftMouseButtonPressed;
-    public Action<InputAction.CallbackContext> OnRightMouseButtonPressed;
-    
-    public Inputs CurrentInput;
-    protected InputState currentState = InputState.Gameplay;
-
-    private Dictionary<InputState, Inputs> Inputs = new Dictionary<InputState, Inputs>();
+    protected InputState currentState = InputState.None;
+    protected Dictionary<InputState, List<InputAction>> inputs = new Dictionary<InputState, List<InputAction>>();
 
     protected BaseInput() {
-        CurrentInput = new Inputs();
-        CurrentInput.Enable();
-        Debug.Log("Enable Input Action");
+        Enable();
+    }
+
+    public void OnSwitchInput(InputState inputState) {
+        if (!inputs.ContainsKey(inputState)) return;
+
+        if (inputs.ContainsKey(currentState)) 
+            foreach (var input in inputs[currentState]) 
+                 input.Disable();
+
+        currentState = inputState;
+        foreach (var input in inputs[currentState]) 
+            input.Enable();
     }
 
     public enum InputState
     {
+        None,
         UI,
         GameUI,
         Gameplay
@@ -43,8 +54,14 @@ public abstract class BaseInput
 public class StandardInputs : BaseInput
 {
     public StandardInputs() {
-        var GameplayInput = new Inputs();
-        GameplayInput.KeyboardCharacter.Movement.performed += OnGetMovement;
+        var gameplayActions = new List<InputAction>();
+        gameplayActions.Add(KeyboardCharacter.Movement);
+        gameplayActions.Add(KeyboardCharacter.Shoot);
+        gameplayActions.Add(KeyboardCharacter.TestShoot);
+        gameplayActions.Add(Mouse.Mouse);
+        gameplayActions.Add(Environment.Mouse);
         
+        inputs.Add(InputState.Gameplay, gameplayActions);
     }
 }
+

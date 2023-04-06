@@ -231,7 +231,7 @@ public class PollerPlaceHolder : MonoBehaviour
 
     public int[] GetIndexesObjects(int count) {
         var objects_ = new int[count];
-        int indexer = 0;
+        //int indexer = 0;
         
         return objects_;
     }

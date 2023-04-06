@@ -75,7 +75,7 @@ public class LobbyManager : MonoBehaviour
         
         OnAuthenticationSigned?.Invoke();
     }
-    public async void AuthenticateData(string playerName) {
+    public void AuthenticateData(string playerName) {
         this.playerName = playerName;
         
         OnAuthenticationSigned?.Invoke();

@@ -31,7 +31,7 @@ public class NetworkPoller : SingletonNetwork<NetworkPoller>
         StateActiveObjectServerRpc(ownerId,typeObject,polledObject.objectId,state);
         return polledObject;
     }
-    
+
     public PolledObject[] GetObjects (ulong ownerId, ObjectPollTypes typeObject,int objectsCount) {
         var polledObjects = objectsToPoll[ownerId][typeObject].GetUnActiveObjects(objectsCount);
 

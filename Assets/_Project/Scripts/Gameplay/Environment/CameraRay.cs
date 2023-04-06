@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,20 +6,18 @@ public class CameraRay : MonoBehaviour
 {
     [SerializeField] private LayerMask rayMask;
 
-    private PlayerInput rayInput;
     private Vector3 mousePointOnGround = Vector3.zero;
 
     public static event Action<RaycastHit> OnDetected;
-    
-    private void Awake() {
-        rayInput = GetComponent<PlayerInput>();
-        
-    }
-    
+
     private void OnEnable() {
-        rayInput.currentActionMap["Mouse"].performed += ReadMousePosition;
+        InputManager.Input.Environment.Mouse.performed += ReadMousePosition;
     }
-    
+
+    private void OnDisable() {
+        InputManager.Input.Environment.Mouse.performed -= ReadMousePosition;
+    }
+
     private void ReadMousePosition(InputAction.CallbackContext obj) {
         Ray ray = Camera.main.ScreenPointToRay(obj.ReadValue<Vector2>());
         
