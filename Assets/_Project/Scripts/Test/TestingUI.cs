@@ -11,7 +11,7 @@ public class TestingUI : MonoBehaviour
     [SerializeField] private CanvasGroup loader;
     [SerializeField] private TMP_Text startText;
     [SerializeField] private TMP_Text visualizeText;
-    [SerializeField] [Range(1.1f,3.0f)] private float speedSmoothAlpha = 1.8f;
+    //[SerializeField] [Range(1.1f,3.0f)] private float speedSmoothAlpha = 1.8f;
     [SerializeField] private int timePreparing;
 
     [SerializeField] private List<string> visualizeListTexts = new List<string>();
@@ -23,7 +23,7 @@ public class TestingUI : MonoBehaviour
     [SerializeField] private float punchElasticity = 1f;
     
     public static event Action PreparingGame;
-    public async void Start() {
+    public void Start() {
         gameObject.SetActive(true);
         StartCoroutine(InvokePreparing(1));
     }

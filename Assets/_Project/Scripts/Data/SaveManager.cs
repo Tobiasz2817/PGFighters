@@ -85,7 +85,7 @@ public class SaveManager
             } 
             catch (SerializationException exc) 
             { 
-                Debug.Log("Failed to load file"); 
+                Debug.Log("Failed to load file: " + exc.Message); 
             } 
         } 
          
@@ -107,7 +107,7 @@ public class SaveManager
             } 
             catch (SerializationException exc) 
             { 
-                Debug.Log("Failed to load file"); 
+                Debug.Log("Failed to load file: " + exc.Message); 
             } 
         } 
         return new SerializedDictionary<string, Item<T>>(); 
