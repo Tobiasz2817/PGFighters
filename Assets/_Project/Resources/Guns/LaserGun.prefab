@@ -82,11 +82,13 @@ MonoBehaviour:
   ownerId: 0
   rb: {fileID: 0}
   TypeVisibler: 0
+  animateShoot: 0
   shootDelay: 0.1
-  speedBullet: 500
+  speedBullet: 30
   bullet: {fileID: 2667564737868350305, guid: 18dd764c61aefa94089a5b77d09dccb7, type: 3}
   shootPoint: {fileID: 2004269783171316281}
-  rangeLaser: 30
+  <ShootType>k__BackingField: 0
+  rangeLaser: 20
 --- !u!1 &2004269784254352629
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class Gun : PolledObject
 {
@@ -8,8 +9,12 @@ public abstract class Gun : PolledObject
     [SerializeField] protected float speedBullet;
     [SerializeField] protected Bullet bullet;
     [SerializeField] protected Transform shootPoint;
+    [field: SerializeField] public TypeShooting ShootType { private set; get; }
+
+
     private bool canShoot = true;
     public bool CanShoot { private set => canShoot = value; get => canShoot; }
+    
 
     public void TryFire(ulong senderId, int bulletId, Vector3 direction) {
         if (canShoot) {
@@ -30,11 +35,17 @@ public abstract class Gun : PolledObject
         return bullet;
     }
 
-    public Transform GetShootPoint() {
+    protected Transform GetShootPoint() {
         return shootPoint;
     }
 
     public void ReverseBullets() {
         NetworkPoller.Instance.ReversObjects(ownerId,ObjectPollTypes.GunBullets,bullet.GetType());
     }
+}
+
+public enum TypeShooting
+{  
+    Automatic,
+    Semi
 }
