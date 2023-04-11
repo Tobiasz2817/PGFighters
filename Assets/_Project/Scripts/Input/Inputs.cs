@@ -85,18 +85,27 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Shoot"",
+                    ""name"": ""TestShoot"",
                     ""type"": ""Button"",
-                    ""id"": ""22c2b749-368f-46a6-8951-c2c23788d54c"",
+                    ""id"": ""ce69c8e2-fc7b-42be-9593-16a3eebacdac"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""TestShoot"",
+                    ""name"": ""AutomaticShoot"",
                     ""type"": ""Button"",
-                    ""id"": ""ce69c8e2-fc7b-42be-9593-16a3eebacdac"",
+                    ""id"": ""f6e7e453-d20d-4d1f-9698-3b86abd6b50b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SemiShoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""f80ad0bf-0297-49a6-ab9d-f6e9dda3d889"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -161,23 +170,34 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c6742dc1-fbca-4a19-95c0-3126b7b74288"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Shoot"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""31bc0bd8-926b-45fe-8096-946e2f50f90a"",
                     ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""TestShoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c6d8bb5-fe1a-4908-8a99-25fdd0c7184c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""AutoFire(pressPoint=0.01,duration=0.01)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AutomaticShoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c13d4fc-45ff-4070-bd42-c56374ce9903"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SemiShoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -277,8 +297,9 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
         // KeyboardCharacter
         m_KeyboardCharacter = asset.FindActionMap("KeyboardCharacter", throwIfNotFound: true);
         m_KeyboardCharacter_Movement = m_KeyboardCharacter.FindAction("Movement", throwIfNotFound: true);
-        m_KeyboardCharacter_Shoot = m_KeyboardCharacter.FindAction("Shoot", throwIfNotFound: true);
         m_KeyboardCharacter_TestShoot = m_KeyboardCharacter.FindAction("TestShoot", throwIfNotFound: true);
+        m_KeyboardCharacter_AutomaticShoot = m_KeyboardCharacter.FindAction("AutomaticShoot", throwIfNotFound: true);
+        m_KeyboardCharacter_SemiShoot = m_KeyboardCharacter.FindAction("SemiShoot", throwIfNotFound: true);
         // Environment
         m_Environment = asset.FindActionMap("Environment", throwIfNotFound: true);
         m_Environment_Mouse = m_Environment.FindAction("Mouse", throwIfNotFound: true);
@@ -389,15 +410,17 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_KeyboardCharacter;
     private IKeyboardCharacterActions m_KeyboardCharacterActionsCallbackInterface;
     private readonly InputAction m_KeyboardCharacter_Movement;
-    private readonly InputAction m_KeyboardCharacter_Shoot;
     private readonly InputAction m_KeyboardCharacter_TestShoot;
+    private readonly InputAction m_KeyboardCharacter_AutomaticShoot;
+    private readonly InputAction m_KeyboardCharacter_SemiShoot;
     public struct KeyboardCharacterActions
     {
         private @Inputs m_Wrapper;
         public KeyboardCharacterActions(@Inputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_KeyboardCharacter_Movement;
-        public InputAction @Shoot => m_Wrapper.m_KeyboardCharacter_Shoot;
         public InputAction @TestShoot => m_Wrapper.m_KeyboardCharacter_TestShoot;
+        public InputAction @AutomaticShoot => m_Wrapper.m_KeyboardCharacter_AutomaticShoot;
+        public InputAction @SemiShoot => m_Wrapper.m_KeyboardCharacter_SemiShoot;
         public InputActionMap Get() { return m_Wrapper.m_KeyboardCharacter; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -410,12 +433,15 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Movement.started -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnMovement;
-                @Shoot.started -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnShoot;
-                @Shoot.performed -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnShoot;
-                @Shoot.canceled -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnShoot;
                 @TestShoot.started -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnTestShoot;
                 @TestShoot.performed -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnTestShoot;
                 @TestShoot.canceled -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnTestShoot;
+                @AutomaticShoot.started -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnAutomaticShoot;
+                @AutomaticShoot.performed -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnAutomaticShoot;
+                @AutomaticShoot.canceled -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnAutomaticShoot;
+                @SemiShoot.started -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnSemiShoot;
+                @SemiShoot.performed -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnSemiShoot;
+                @SemiShoot.canceled -= m_Wrapper.m_KeyboardCharacterActionsCallbackInterface.OnSemiShoot;
             }
             m_Wrapper.m_KeyboardCharacterActionsCallbackInterface = instance;
             if (instance != null)
@@ -423,12 +449,15 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
-                @Shoot.started += instance.OnShoot;
-                @Shoot.performed += instance.OnShoot;
-                @Shoot.canceled += instance.OnShoot;
                 @TestShoot.started += instance.OnTestShoot;
                 @TestShoot.performed += instance.OnTestShoot;
                 @TestShoot.canceled += instance.OnTestShoot;
+                @AutomaticShoot.started += instance.OnAutomaticShoot;
+                @AutomaticShoot.performed += instance.OnAutomaticShoot;
+                @AutomaticShoot.canceled += instance.OnAutomaticShoot;
+                @SemiShoot.started += instance.OnSemiShoot;
+                @SemiShoot.performed += instance.OnSemiShoot;
+                @SemiShoot.canceled += instance.OnSemiShoot;
             }
         }
     }
@@ -540,8 +569,9 @@ public partial class @Inputs : IInputActionCollection2, IDisposable
     public interface IKeyboardCharacterActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnShoot(InputAction.CallbackContext context);
         void OnTestShoot(InputAction.CallbackContext context);
+        void OnAutomaticShoot(InputAction.CallbackContext context);
+        void OnSemiShoot(InputAction.CallbackContext context);
     }
     public interface IEnvironmentActions
     {

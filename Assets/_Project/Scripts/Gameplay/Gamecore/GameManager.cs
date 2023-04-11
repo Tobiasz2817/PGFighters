@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
     public Action<ulong> GameIsOver;
 
     public static event Action OnGameStarted;
+    public static event Action OnGamePause;
     public static event Action<ulong> OnGameOverHandler;
 
     private GameState currentState = GameState.Preparing;
@@ -21,11 +22,14 @@ public class GameManager : Singleton<GameManager>
     private void OnEnable() {
         StartedGame += StartGame;
         GameIsOver += GameOver;
+        PauseGame += PausingGame;
+        PauseGame?.Invoke();
     }
 
     private void OnDisable() {
         StartedGame -= StartGame;
         GameIsOver -= GameOver;
+        PauseGame -= PausingGame;
     }
 
     private void StartGame() {
@@ -36,7 +40,10 @@ public class GameManager : Singleton<GameManager>
         ChangeGameState(GameState.End);
         OnGameOverHandler?.Invoke(losePlayerId);
     }
-
+    private void PausingGame() {
+        ChangeGameState(GameState.Pause);
+        OnGamePause?.Invoke();
+    }
     
     private void ChangeGameState(GameState gameState) {
         this.currentState = gameState;
@@ -46,6 +53,7 @@ public class GameManager : Singleton<GameManager>
     {
         Preparing,
         Started,
-        End
+        End,
+        Pause
     }
 }

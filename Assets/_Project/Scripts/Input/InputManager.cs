@@ -56,12 +56,17 @@ public class StandardInputs : BaseInput
     public StandardInputs() {
         var gameplayActions = new List<InputAction>();
         gameplayActions.Add(KeyboardCharacter.Movement);
-        gameplayActions.Add(KeyboardCharacter.Shoot);
+        gameplayActions.Add(KeyboardCharacter.SemiShoot);
+        gameplayActions.Add(KeyboardCharacter.AutomaticShoot);
         gameplayActions.Add(KeyboardCharacter.TestShoot);
         gameplayActions.Add(Mouse.Mouse);
         gameplayActions.Add(Environment.Mouse);
         
         inputs.Add(InputState.Gameplay, gameplayActions);
+
+
+        var noneActions = new List<InputAction>();
+        inputs.Add(InputState.None,noneActions);
     }
 }
 
