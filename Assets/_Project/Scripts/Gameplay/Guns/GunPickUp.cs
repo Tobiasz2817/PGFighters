@@ -28,8 +28,8 @@ public class GunPickUp : NetworkBehaviour
         if (other.TryGetComponent(out GunBarrierHandler gunBarrierHandler)) {
             gunBarrierHandler.ControlStateObject(false);
             //NetworkPoller.Instance.PollObject(gunBarrierHandler.polledObject.ownerId,ObjectPollTypes.Guns,gunBarrierHandler.polledObject.objectId);
-            PickGunServerRpc(gunBarrierHandler.polledObject.ownerId,gunBarrierHandler.polledObject.objectId);
-            PickGun(gunBarrierHandler.polledObject.ownerId,gunBarrierHandler.polledObject.objectId);
+            PickGunServerRpc(OwnerClientId,gunBarrierHandler.polledObject.objectId);
+            PickGun(OwnerClientId,gunBarrierHandler.polledObject.objectId);
         }
     }
 
@@ -48,8 +48,8 @@ public class GunPickUp : NetworkBehaviour
     }
     
     private void EntryEquipGun() {
-        var index = NetworkPoller.Instance.GetObjectByGenericType<BasicGun>(OwnerClientId,ObjectPollTypes.Guns);
+        /*var index = NetworkPoller.Instance.GetObjectByGenericType<BasicGun>(OwnerClientId,ObjectPollTypes.Guns);
         PickGunServerRpc(OwnerClientId,index.objectId);
-        PickGun(OwnerClientId,index.objectId);
+        PickGun(OwnerClientId,index.objectId);*/
     }
 }

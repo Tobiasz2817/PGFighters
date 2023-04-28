@@ -8,8 +8,9 @@ public class PlayerShooting : NetworkBehaviour
     
     [SerializeField] private Gun gun;
     [SerializeField] private GunPickUp pickUpGun;
-    private Vector3 direction;
-    
+
+    private Vector3 shootDirection;
+
     [SerializeField] private Animator anim;
 
     #endregion
@@ -27,26 +28,24 @@ public class PlayerShooting : NetworkBehaviour
     #region Network Callbacks
 
     public override void OnNetworkSpawn() {
-        if (!IsOwner) {
-            this.enabled = false;
-            return;
-        }
-        
         pickUpGun.OnGunPickUp += SetGunReferences;
+
+        this.enabled = IsOwner;
+        if (!IsOwner) return;
+
         InputManager.Input.KeyboardCharacter.AutomaticShoot.performed += InputShoot;
         InputManager.Input.KeyboardCharacter.SemiShoot.performed += InputShoot;
         InputManager.Input.KeyboardCharacter.TestShoot.performed += InputShootK;
-        CameraRay.OnDetected += ReadDirection;
     }
 
     public override void OnNetworkDespawn() {
+        pickUpGun.OnGunPickUp -= SetGunReferences;
+        
         if (!IsOwner) return;
         
-        pickUpGun.OnGunPickUp -= SetGunReferences;
         InputManager.Input.KeyboardCharacter.AutomaticShoot.performed -= InputShoot;
         InputManager.Input.KeyboardCharacter.SemiShoot.performed -= InputShoot;
         InputManager.Input.KeyboardCharacter.TestShoot.performed -= InputShootK;
-        CameraRay.OnDetected -= ReadDirection;
     }
 
     #endregion
@@ -69,7 +68,7 @@ public class PlayerShooting : NetworkBehaviour
     public void Shooting() {
         if (gun != null) {
             var bulletId = NetworkPoller.Instance.GetIndexObject(OwnerClientId,gun.GetGunBullet().Type,gun.GetGunBullet().GetType());
-            Shoot(OwnerClientId,bulletId,direction);
+            Shoot(OwnerClientId,bulletId,shootDirection);
         }
     }
 
@@ -77,19 +76,20 @@ public class PlayerShooting : NetworkBehaviour
     #region Shooting
     
     [ServerRpc(RequireOwnership = false)]
-    private void ShootServerRpc(ulong ownerId,int bulletId, Vector3 direction) {
-        ShootClientRpc(ownerId,bulletId,direction);
+    private void ShootServerRpc(ulong ownerId,int bulletId, Vector3 shootDirection) {
+        ShootClientRpc(ownerId,bulletId,shootDirection);
     }
     
     [ClientRpc]
-    private void ShootClientRpc(ulong ownerId,int bulletId, Vector3 direction) {
+    private void ShootClientRpc(ulong ownerId,int bulletId, Vector3 shootDirection) {
         if (IsOwner) return;
-        Shoot(ownerId, bulletId, direction);
+        Shoot(ownerId, bulletId,shootDirection);
     }
 
-    private void Shoot(ulong ownerId, int bulletId, Vector3 direction) {
+    private void Shoot(ulong ownerId, int bulletId, Vector3 shootDirection) {
+        Debug.Log(gun);
         if (gun != null) 
-            gun.TryFire(ownerId, bulletId, direction);
+            gun.TryFire(ownerId, bulletId, shootDirection);
     }
     
     
@@ -100,18 +100,22 @@ public class PlayerShooting : NetworkBehaviour
     private void InputShoot(InputAction.CallbackContext inputs) {
         if (!IsOwner) return;
         if (GameManager.Instance.CurrentState != GameManager.GameState.Started) return;
-        Debug.Log("InputShootInvoke");
         
         if (gun != null) {
             if (gun.CanShoot) {
+                shootDirection = CameraRay.Instance.GetRay(gun.GetShootPoint().position.y).point;
+                
                 if (gun.animateShoot) {
+                    SetDirectionServerRpc(shootDirection);
+                    SetDirection(shootDirection);
                     AnimShootServerRpc("Attack01");
                     AnimShoot("Attack01");
                 }
                 else {
                     var bulletId = NetworkPoller.Instance.GetIndexObject(OwnerClientId,gun.GetGunBullet().Type,gun.GetGunBullet().GetType());
-                    ShootServerRpc(OwnerClientId,bulletId,direction);
-                    Shoot(OwnerClientId,bulletId,direction);
+                    
+                    ShootServerRpc(OwnerClientId,bulletId,shootDirection);
+                    Shoot(OwnerClientId,bulletId,shootDirection);
                 }
             }
         }
@@ -123,28 +127,45 @@ public class PlayerShooting : NetworkBehaviour
         
         if (gun != null) {
             if (gun.CanShoot) {
+                shootDirection = CameraRay.Instance.GetRay(gun.GetShootPoint().position.y).point;
                 if (gun.animateShoot) {
+                    SetDirectionServerRpc(shootDirection);
+                    SetDirection(shootDirection);
                     AnimShootServerRpc("Attack02");
                     AnimShoot("Attack02");
                 }
                 else {
                     var bulletId = NetworkPoller.Instance.GetIndexObject(OwnerClientId,gun.GetGunBullet().Type,gun.GetGunBullet().GetType());
-                    ShootServerRpc(OwnerClientId,bulletId,direction);
-                    Shoot(OwnerClientId,bulletId,direction);
+                    
+                    ShootServerRpc(OwnerClientId,bulletId,shootDirection);
+                    Shoot(OwnerClientId,bulletId,shootDirection);
                 }
             }
         }
     }
-    
-    private void ReadDirection(RaycastHit hit) {
-        direction = hit.point;
-    }
 
     #endregion
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetDirectionServerRpc(Vector3 direction) {
+        SetDirectionClientRpc(direction);
+    }
+    
+    [ClientRpc]
+    private void SetDirectionClientRpc(Vector3 direction) {
+        if (IsOwner) return;
+        SetDirection(direction);
+    }
+    
+    private void SetDirection(Vector3 direction) {
+        this.shootDirection = direction;
+    }
+    
     #region Gun Ref
     
     private void SetGunReferences(ulong ownerId,int index) {
-        var gun_ = (Gun)NetworkPoller.Instance.GetActiveObject(ownerId, ObjectPollTypes.Guns, index);
+        var gun_ = (Gun)NetworkPoller.Instance.GetActiveObject(0, ObjectPollTypes.Guns, index);
+        Debug.Log("Equip Gun");
         if (gun_ == null)
         {
             Debug.Log("Gun Reference are null");

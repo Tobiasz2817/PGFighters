@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserGun : Gun
@@ -9,6 +6,7 @@ public class LaserGun : Gun
 
     private Vector3 tmpDirection;
     private Vector3 calcTmpDirection;
+    
     protected override void Fire(ulong senderId,int bulletId, Vector3 direction) {
         Quaternion rotation = Quaternion.LookRotation(direction);
         rotation.z = 0;
@@ -33,8 +31,17 @@ public class LaserGun : Gun
         bulletReference.SetStopDistance(rayDirection.direction * rangeLaser);
 
         bulletReference.gameObject.SetActive(true);
+        
+        lastStartPoint = GetShootPoint().position;
+        lastRay = calculateDirection * rangeLaser;
     }
-    
+
+    private Vector3 lastRay;
+    private Vector3 lastStartPoint;
+    private void Update() {
+        Debug.DrawRay(lastStartPoint,lastRay,Color.green);
+    }
+
 #if UNITY_EDITOR
     public void OnDrawGizmos() {
         Gizmos.color = Color.blue;
@@ -44,7 +51,6 @@ public class LaserGun : Gun
         var rayDirection2 = new Ray(GetShootPoint().position,calcTmpDirection);
         Gizmos.DrawRay(rayDirection2.origin, rayDirection2.direction * rangeLaser);
     }
-    
 #endif    
     
 }

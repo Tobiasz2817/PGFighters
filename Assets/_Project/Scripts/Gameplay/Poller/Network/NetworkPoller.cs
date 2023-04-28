@@ -262,9 +262,11 @@ public class NetworkPoller : SingletonNetwork<NetworkPoller>
     }
     
     public void ReversObjects(ulong playerId,ObjectPollTypes pollTypes,Type type) {
+        Debug.Log(playerId + " " + pollTypes + " type: " + type);
         if (objectsToPoll.ContainsKey(playerId)) {
             if (objectsToPoll[playerId].ContainsKey(pollTypes)) {
                 objectsToPoll[playerId][pollTypes].ReverseOnNewObject(type);
+                Debug.Log("Reversing");
             }
         }
     }
