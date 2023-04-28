@@ -38,10 +38,12 @@ public class PlayerCustomizeGun : NetworkBehaviour
         EquipGun(content,index,ownerId);
     }
     private void EquipGun(string content,int index, ulong ownerId) {
-        currentGun = (Gun)NetworkPoller.Instance.GetActiveObject(ownerId, ObjectPollTypes.Guns,index);
+        Debug.Log("Equip gun");
+        currentGun = (Gun)NetworkPoller.Instance.GetActiveObject(0, ObjectPollTypes.Guns,index);
         var gunBarrierHandler = currentGun.transform.GetComponentInChildren<GunBarrierHandler>();
         if (gunBarrierHandler) gunBarrierHandler.ControlStateObject(false);
-        currentGun.ReverseBullets();
+        Debug.Log(ownerId);
+        currentGun.ReverseBullets(ownerId);
         currentGun.transform.parent = playerEquipmentData.GetContent(content);
         currentGun.transform.localPosition = Vector3.zero;
         currentGun.transform.localRotation = Quaternion.identity;

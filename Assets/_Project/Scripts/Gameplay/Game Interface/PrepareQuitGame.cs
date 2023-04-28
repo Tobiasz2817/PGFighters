@@ -23,7 +23,7 @@ public class PrepareQuitGame : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     private void ShutdownGameServerRpc() {
-        if (Unity.Netcode.NetworkManager.Singleton == null) return;
+        if (NetworkManager.Singleton == null) return;
         if (NetworkManager.Singleton.ShutdownInProgress) return;
         
         NetworkManager.Singleton.Shutdown();

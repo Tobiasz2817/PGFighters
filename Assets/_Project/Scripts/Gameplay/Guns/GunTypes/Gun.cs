@@ -35,11 +35,11 @@ public abstract class Gun : PolledObject
         return bullet;
     }
 
-    protected Transform GetShootPoint() {
+    public Transform GetShootPoint() {
         return shootPoint;
     }
 
-    public void ReverseBullets() {
+    public void ReverseBullets(ulong ownerId) {
         NetworkPoller.Instance.ReversObjects(ownerId,ObjectPollTypes.GunBullets,bullet.GetType());
     }
 }

@@ -7,6 +7,7 @@ public class AnimateCharacter : NetworkBehaviour
     [SerializeField] private Animator anim;
 
     private NetworkVariable<Vector3> inputMovement = new NetworkVariable<Vector3>(default,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
+    
     public override void OnNetworkSpawn() {
         if (!IsOwner) 
             return;
